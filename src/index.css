@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.mainheader {
+  background-color: darkcyan;
+  color: white;
+}
+.headertitile {
+  font-weight: 900;
+  padding-left: 150px;
+  letter-spacing: 1px;
+}
+.list-style-none {
+  list-style-type: none;
+  display: flex;
+}
+ul.list-style-none {
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+.list-style-none li {
+  display: inline-flex;
+}
+.lifont {
+  font-size: 18px;
+}
+.color-white {
+  color: white;
+}
+.padding20 {
+  padding: 20px;
+}
+
+/* Admin CSS */
+.admin-sidebar {
+  height: 100%;
+  background-color: darkcyan;
+}
+.list-style {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.sidebartitle {
+  height: 100%;
+  width: 100%;
+}
+.sidebarheading {
+  color: white;
+  width: 100%;
+  height: 100%;
+}
