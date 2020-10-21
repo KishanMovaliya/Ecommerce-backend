@@ -13,8 +13,14 @@ code {
 }
 
 .mainheader {
-  background-color: darkcyan;
-  color: white;
+  background-color: hotpink;
+  color: darkslategray;
+}
+.fixed {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  width: 100%;
 }
 .headertitile {
   font-weight: 900;
@@ -35,8 +41,8 @@ ul.list-style-none {
 .lifont {
   font-size: 18px;
 }
-.color-white {
-  color: white;
+.color-darkslategray {
+  color: darkslategray;
 }
 .padding20 {
   padding: 20px;

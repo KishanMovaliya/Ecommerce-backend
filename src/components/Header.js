@@ -34,7 +34,7 @@ function Header(Childcomponent) {
     };
     return (
       <div className="container-fluid">
-        <div className="row mainheader">
+        <div className="row mainheader fixed">
           <div className="offset-md-1 col-md-4 col-sm-12">
             <h3 className="headertitile">E-commerce</h3>
           </div>

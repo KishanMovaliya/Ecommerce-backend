@@ -19,9 +19,11 @@ function Product(props){
     const classes = useStyles();
     const [showProduct, setShowProduct] = useState([]);
     const [allSubCategory, setAllSubCategory] = useState([]);
+    const [image, setImage] = useState([]);
     const [productDetails, setProductDetails] = useState({
-      cId: "",
-      sId:"",
+      _id:"",
+      categoryId: "",
+      subcategoryId:"",
       images: "",
       title: "",
       descriptions:"",
@@ -75,7 +77,7 @@ function Product(props){
     }, [])
     const handleCategoryChange = (e) => {
       e.preventDefault();
-      setProductDetails({...productDetails, cId: e.target.value});
+      setProductDetails({...productDetails, categoryId: e.target.value});
       const id = e.target.value;
       Axios.get(`http://localhost:4444/subcategories/usecategoryid/${id}`)
       .then((res) => {
@@ -91,12 +93,16 @@ function Product(props){
 
     const handleSubChange = (e) => {
       e.preventDefault();
-      setProductDetails({...productDetails, sId: e.target.value});
+      setProductDetails({...productDetails, subcategoryId: e.target.value});
     }
 
     const handleFileChange = (e) => {
       e.preventDefault();
       setProductDetails({...productDetails, images: e.target.files[0]});
+    }
+    const handleUpdateFileChange = (e) => {
+      e.preventDefault();
+      setImage( e.target.files[0]);
     }
 
     const handleChange = (e) => {
@@ -106,23 +112,64 @@ function Product(props){
 
     const handleDelete = (e, id) => {
       e.preventDefault();
-      console.log(id);
+      
+      Axios.delete(`http://localhost:4444/products/deleteproduct/${id}`)
+      .then((res) => {
+        alert("Deleted Successfully.");
+        selectAllProduct();
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.status === 400) {
+          setError(err.response.data.msg);
+        }
+      });
     }
     const handleUpdate = (e, id) => {
       e.preventDefault();
-      console.log(id);
+      Axios.get(`http://localhost:4444/products/selectproduct/${id}`)
+      .then((res) => {
+        selectAllSubCategory();   
+        setProductDetails(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.status === 400) {
+          setError(err.response.data.msg);
+        }
+      });
     }
    
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
+      if(productDetails._id){
+        const data = new FormData();
+        data.append("title", productDetails.title);
+        data.append("descriptions", productDetails.descriptions);
+        data.append("price", productDetails.price);
+        data.append("images", image);
+        
+        Axios.put(`http://localhost:4444/products/updateproduct/${productDetails._id}`, data)
+        .then((res) => {
+          setError("updated Successfully.");
+          handleReset(e);
+          selectAllProduct();
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.data.status === 400) {
+            setError(err.response.data.msg);
+          }
+        });
+      } else {
         const data = new FormData();
         data.append("title", productDetails.title);
         data.append("descriptions", productDetails.descriptions);
         data.append("price", productDetails.price);
         data.append("images", productDetails.images);
-
-        Axios.post(`http://localhost:4444/products/create/${productDetails.cId}/${productDetails.sId}`, data)
+        
+        Axios.post(`http://localhost:4444/products/create/${productDetails.categoryId}/${productDetails.subcategoryId}`, data)
         .then((res) => {
           setError("Created Successfully.");
           handleReset(e);
@@ -134,13 +181,14 @@ function Product(props){
             setError(err.response.data.msg);
           }
         });
+      }
     };
-
     const handleReset = (e) => {
       e.persist();
       setProductDetails({
-        cId: "",
-        sId:"",
+        _id:"",
+        categoryId: "",
+        subcategoryId:"",
         images: "",
         title: "",
         descriptions:"",
@@ -159,46 +207,96 @@ function Product(props){
           onSubmit={handleSubmit}
           encType="multipart/form-data"
         >
-          <div className="form-group">
-            <label htmlFor="category">Category : </label>
-            <select
-              className="browser-default custom-select"
-              name="category"
-              onChange={handleCategoryChange}
-              value={productDetails.cId}
-              >
-              <option value="">--Select Category--</option>
-              {categories.map((category) => 
-                <option key={category._id} value={category._id}>{category.category}</option>
-                )}  
-              
-            </select>
-          </div>
-         
-          <div className="form-group">
-            <label htmlFor="category">Sub Category : </label>
-            <select
+          {productDetails._id ?
+          <>
+            <input type="hidden" name="_id" value={productDetails._id} />
+            <div className="form-group">
+              <label htmlFor="category">Category : </label>
+              <select
                 className="browser-default custom-select"
-                name="subcategory"
-                onChange={handleSubChange}
-                value={productDetails.sId}
-              >
-                <option value="">--Select Sub Category--</option>
-                {subcategories
-                  ? subcategories.map((subcategory) => (
-                      <option key={subcategory._id} value={subcategory._id}>
-                        {subcategory.subcategory}
-                      </option>
-                    ))
-                  : ""}
+                name="category"
+                value={productDetails.categoryId}
+                >
+                {categories.map((category) => {
+                  if(productDetails.categoryId === category._id){
+                    
+                    return <option key={category._id} value={category._id}>{category.category}</option>
+                  }
+                })}  
+                
               </select>
-          </div>
-
-          <input
-            type="file"
-            name="images"
-            onChange={handleFileChange}
-           />                    
+            </div>
+          
+            <div className="form-group">
+              <label htmlFor="category">Sub Category : </label>
+              <select
+                className="browser-default custom-select"
+                name="category"
+                value={productDetails.subcategoryId}
+                >
+                {allSubCategory.map((subcategory) => {
+                  if(productDetails.subcategoryId === subcategory._id){
+                    
+                    return <option key={subcategory._id} value={subcategory._id}>{subcategory.subcategory}</option>
+                  }
+                })}  
+                
+              </select>
+            </div>
+          </>
+          : 
+          <>
+            <div className="form-group">
+              <label htmlFor="category">Category : </label>
+              <select
+                className="browser-default custom-select"
+                name="category"
+                onChange={handleCategoryChange}
+                value={productDetails.categoryId}
+                >
+                <option value="">--Select Category--</option>
+                {categories.map((category) => 
+                  <option key={category._id} value={category._id}>{category.category}</option>
+                  )}  
+                
+              </select>
+            </div>
+          
+            <div className="form-group">
+              <label htmlFor="category">Sub Category : </label>
+              <select
+                  className="browser-default custom-select"
+                  name="subcategory"
+                  onChange={handleSubChange}
+                  value={productDetails.subcategoryId}
+                >
+                  <option value="">--Select Sub Category--</option>
+                  {subcategories
+                    ? subcategories.map((subcategory) => (
+                        <option key={subcategory._id} value={subcategory._id}>
+                          {subcategory.subcategory}
+                        </option>
+                      ))
+                    : ""}
+                </select>
+            </div>
+          </>
+          }
+          
+          {productDetails._id ? 
+            <input
+              type="file"
+              name="images"
+              onChange={handleUpdateFileChange}
+            />     
+           : 
+            <input
+              type="file"
+              name="images"
+              onChange={handleFileChange}
+            />
+          }
+                          
           <TextField
             label="title"
             name="title"
@@ -234,7 +332,7 @@ function Product(props){
             color="primary"
             style={{ marginTop: 20 }}
           >
-            Submit
+            {productDetails._id ? "Update" : "Submit"}            
           </Button>
           <Button
             variant="contained"
