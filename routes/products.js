@@ -4,6 +4,7 @@ const router = express.Router();
 const fs = require("fs");
 const multer = require("multer");
 const Products = require("../models/products");
+const { waitForDebugger } = require("inspector");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -34,14 +35,14 @@ const upload = multer({
 });
   
 //----create product----
-router.post("/create/:categoryId/:subcategoryId", upload.array("images", 10), async (req, res) =>  {
+router.post("/create/:categoryId/:subcategoryId", upload.single("images"), async (req, res) =>  {
 
-  if (!req.files) return res.send("please select file");
+  if (!req.file) return res.send("please select file");
 
   const newProduct = new Products({
     categoryId: mongoose.Types.ObjectId(req.params.categoryId),
     subcategoryId: mongoose.Types.ObjectId(req.params.subcategoryId),
-    images: req.files.path,
+    images: req.file.path,
     title: req.body.title,
     descriptions: req.body.descriptions,
     price: req.body.price,
@@ -65,6 +66,17 @@ router.get("/selectAll", async (req, res) =>  {
   } 
 });
 
+//----select product id wise----
+router.get("/selectproduct/:id", async (req, res) =>  {
+
+  try {
+    const product = await Products.findById(req.params.id);
+    return res.json(product);
+  } catch (error) {
+    return  res.send({ status: 400,msg: error.message });
+  } 
+});
+
 //----delete product----
 router.delete("/deleteproduct/:id", async(req,res) => {
   const id = req.params.id;
@@ -74,14 +86,52 @@ router.delete("/deleteproduct/:id", async(req,res) => {
   try {
     if(data){
       if(data.images){
-        console.log(data.images);
-        fs.unlink(data.images, (err) => {
-          if (err) throw err;
-        });
+        data.images.map((filepath) => {
+          fs.unlink(filepath, (err) => {
+            if (err) throw err;
+          });
+        })
       }
       const deleteData = await data.deleteOne();
       return res.json(deleteData);
     }
+  } catch (error) {
+    console.log(error);
+    return  res.send({ status: 400,msg: error.message });
+  } 
+});
+
+
+//----update product----
+router.put("/updateproduct/:id", upload.single("images"), async(req,res) => {
+  const id = req.params.id;
+  const data = await Products.findById(id);
+  let updata;
+  try {
+    if(!req.file){
+        data.title = req.body.title;
+        data.descriptions = req.body.descriptions;
+        data.price = req.body.price;
+        
+        updata = await data.save();
+    } else {
+      if(data){
+        if(data.images){
+          data.images.map((filepath) => {
+            fs.unlink(filepath, (err) => {
+              if (err) throw err;
+            });
+          })
+        }
+      }
+      data.title = req.body.title;
+      data.descriptions = req.body.descriptions;
+      data.price = req.body.price;
+      data.images = req.file.path;
+  
+      updata = await data.save();
+    }
+    return res.json(updata);
   } catch (error) {
     console.log(error);
     return  res.send({ status: 400,msg: error.message });
