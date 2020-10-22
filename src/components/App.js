@@ -11,24 +11,31 @@ import AdminDashboard from "./admin/Dashboard";
 import Category from "./admin/Category";
 import Subcategory from "./admin/Subcategory";
 import Product from "./admin/Product";
+import Tracking from "./Tracking";
+
+import { Provider } from "react-redux";
+import store from "../redux/store";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" exact component={Dashboard} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <UserAuthentication>
-          <Route path="/admin/dashboard" component={AdminDashboard} />
-          <Route path="/admin/category" component={Category} />
-          <Route path="/admin/subcategory" component={Subcategory} />
-          <Route path="/admin/product" component={Product} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/allproduct" component={AllProduct} />
-        </UserAuthentication>
-      </Switch>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route path="/" exact component={Dashboard} />
+          <UserAuthentication>
+            <Route path="/admin/dashboard" component={AdminDashboard} />
+            <Route path="/admin/category" component={Category} />
+            <Route path="/admin/subcategory" component={Subcategory} />
+            <Route path="/admin/product" component={Product} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/allproduct" component={AllProduct} />
+            <Route path="/tracking" component={Tracking} />
+          </UserAuthentication>
+        </Switch>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

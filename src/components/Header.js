@@ -7,12 +7,13 @@ import Axios from "axios";
 function Header(Childcomponent) {
   return function ResponsiveHeader(props) {
     const [user, setUser] = useState();
-    const jwt = getJwt();
 
     useEffect(() => {
+      const jwt = getJwt();
       if (!jwt) {
         props.history.push("/");
       }
+      console.log("called");
 
       Axios.get("http://localhost:4444/posts/loggeddata", {
         headers: { authorization: jwt },
@@ -34,7 +35,7 @@ function Header(Childcomponent) {
     };
     return (
       <div className="container-fluid">
-        <div className="row mainheader fixed">
+        <div className="row mainheader">
           <div className="offset-md-1 col-md-4 col-sm-12">
             <h3 className="headertitile">E-commerce</h3>
           </div>
@@ -42,7 +43,7 @@ function Header(Childcomponent) {
             <UserNav />
           </div>
 
-          {user ? (
+          {Boolean(user) ? (
             <div className="col-md-3 col-sm-12">
               {user[0].email}
 

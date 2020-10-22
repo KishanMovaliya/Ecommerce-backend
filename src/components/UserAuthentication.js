@@ -1,32 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { getJwt } from "../helper/jwt";
 import { withRouter } from "react-router-dom";
-import Axios from "axios";
+
+import { useSelector, useDispatch } from "react-redux";
+import { loggedIn, loginSuccess } from "../redux/actions/registerActions";
 
 function Authentication(props) {
-  const [user, setUser] = useState([]);
+  const dispatch = useDispatch();
+  const userLoggedIn = useSelector(({ register }) => register.data);
 
   useEffect(() => {
     const jwt = getJwt();
-    if (!jwt) {
-      props.history.push("/");
+
+    if (jwt) {
+      dispatch(loggedIn());
+    } else {
+      props.history.push("/dashboard");
     }
-
-    Axios.get("http://localhost:4444/posts/loggeddata", {
-      headers: { authorization: jwt },
-    })
-      .then((res) => {
-        setUser([res.data]);
-        if (res.data.status === 0) {
-          props.history.push("/admin/dashboard");
-        }
-      })
-      .catch((error) => {
-        localStorage.removeItem("ecom");
-        props.history.push("/login");
-      });
   }, []);
-
   return <div>{props.children}</div>;
 }
 

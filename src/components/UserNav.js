@@ -17,7 +17,7 @@ function UserNav() {
             </Link>
           </li>
           <li className="padding20 lifont">
-            <Link to="/#" className="color-darkslategray">
+            <Link to="/tracking" className="color-darkslategray">
               Tracking
             </Link>
           </li>

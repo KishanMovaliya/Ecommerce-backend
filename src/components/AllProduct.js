@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import Header from './Header';
+import React, { useEffect, useState } from "react";
+import Header from "./Header";
 
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import Axios from 'axios';
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import CameraIcon from "@material-ui/icons/PhotoCamera";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Link from "@material-ui/core/Link";
+
+import { useSelector, useDispatch } from "react-redux";
+import { getProducts } from "../redux/actions/productActions";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -46,12 +48,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(8),
   },
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    paddingTop: "56.25%", // 16:9
   },
   cardContent: {
     flexGrow: 1,
@@ -64,79 +66,50 @@ const useStyles = makeStyles((theme) => ({
 
 function AllProduct() {
   const classes = useStyles();
-  const [productDetails, setProductDetails] = useState([]);
-  const [categoryDetails, setCategoryDetails] = useState([]);
-  const [subCategoryDetails, setSubCategoryDetails] = useState([]);
-
-  const selectAllProduct = () => {
-      Axios.get("http://localhost:4444/products/selectAll")
-      .then((res) => {
-        setProductDetails(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          console.log(err.response.data.msg);
-          // setError(err.response.data.msg);
-        }
-      })
-  }
-  const selectAllSubCategory = () => {
-      
-    Axios.get("http://localhost:4444/subcategories/selectall")
-    .then((res) => {
-      setSubCategoryDetails(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-      if (err.response.data.status === 400) {
-        console.log(err.response.data.msg);
-        // setError(err.response.data.msg);
-      }
-    });
-  }
-  const selectAllCategory = () => {
-      
-    Axios.get("http://localhost:4444/categories/selectall")
-    .then((res) => {
-      setCategoryDetails(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-      if (err.response.data.status === 400) {
-        console.log(err.response.data.msg);
-        // setError(err.response.data.msg);
-      }
-    });
-  }
+  const Products = useSelector(({ product }) => product.data);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    selectAllProduct();
-    selectAllSubCategory();
-    selectAllCategory();
-  }, [])
-  console.log(productDetails.title);
+    dispatch(getProducts());
+  }, []);
+
+  const handleProductView = (e, id) => {
+    e.preventDefault();
+    console.log(id);
+  };
   return (
     <React.Fragment>
       <CssBaseline />
-      
+
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+            <Typography
+              component="h1"
+              variant="h2"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
               Product layout
             </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Something short and leading about the collection below—its contents, the creator, etc.
-              Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-              entirely.
+            <Typography
+              variant="h5"
+              align="center"
+              color="textSecondary"
+              paragraph
+            >
+              Something short and leading about the collection below—its
+              contents, the creator, etc. Make it short and sweet, but not too
+              short so folks don&apos;t simply skip over it entirely.
             </Typography>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {productDetails.map((card) => (
+            {Products.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -145,18 +118,27 @@ function AllProduct() {
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {card.title}
-                    </Typography>
-                    <Typography>
+                    <span className="col-md-6 col-sm-12">
+                      <b>{card.title}</b>
+                    </span>
+                    <span className="col-md-6 col-sm-12">
                       {card.descriptions}
-                    </Typography>
+                    </span>
+                  </CardContent>
+                  <CardContent className={classes.cardContent}>
+                    <span className="col-md-6 col-sm-12">
+                      <b>&#x20B9; {card.price}</b>
+                    </span>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
                       add to card
                     </Button>
-                    <Button size="small" color="primary">
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={(e) => handleProductView(e, card._id)}
+                    >
                       view
                     </Button>
                   </CardActions>
@@ -171,7 +153,12 @@ function AllProduct() {
         <Typography variant="h6" align="center" gutterBottom>
           Footer
         </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+        <Typography
+          variant="subtitle1"
+          align="center"
+          color="textSecondary"
+          component="p"
+        >
           Something here to give the footer a purpose!
         </Typography>
         <Copyright />

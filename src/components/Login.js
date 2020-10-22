@@ -3,6 +3,9 @@ import Axios from "axios";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../redux/actions/registerActions";
+
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +39,10 @@ function Login(props) {
 
   const [error, setError] = useState([]);
 
+  const dispatch = useDispatch();
+  const login = useSelector(({ register }) => register.data);
+  const isLogin = useSelector(({ register }) => register.isLogin);
+
   const handleCancle = (e) => {
     e.preventDefault();
     props.history.push("/");
@@ -47,17 +54,8 @@ function Login(props) {
     },
     validate,
     onSubmit: (values) => {
-      Axios.post("http://localhost:4444/login/success", values)
-        .then((res) => {
-          setError("");
-          localStorage.setItem("ecom", res.data);
-          props.history.push("/dashboard");
-        })
-        .catch((err) => {
-          if (err.response.status === 400) {
-            setError(err.response.data.msg);
-          }
-        });
+      dispatch(loginSuccess(values));
+      props.history.push("/");
     },
   });
 

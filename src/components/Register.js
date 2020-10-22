@@ -2,8 +2,10 @@ import { Button, makeStyles, TextField } from "@material-ui/core";
 import Axios from "axios";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-
 import { Link } from "react-router-dom";
+
+import { useSelector, useDispatch } from "react-redux";
+import { registerSuccess } from "../redux/actions/registerActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +36,9 @@ const validate = (values) => {
 function Register(props) {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+  const register = useSelector(({ register }) => register.data);
+
   const [error, setError] = useState([]);
 
   const handleCancle = (e) => {
@@ -49,19 +54,13 @@ function Register(props) {
     validate,
     onSubmit: (values) => {
       console.log(values);
-      Axios.post("http://localhost:4444/register/create", values)
-        .then((res) => {
-          setError("");
-          props.history.push("/login");
-        })
-        .catch((err) => {
-          if (err.response.status === 400) {
-            setError(err.response.data.msg);
-          }
-        });
+      dispatch(registerSuccess(values));
+      if (register != []) {
+        props.history.push("/login");
+      }
     },
   });
-
+  console.log("register", register);
   return (
     <div className="register-box" align="center">
       <div className="header-register">
