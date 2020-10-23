@@ -1,5 +1,10 @@
 import Axios from "axios";
-import { REGISTER_SUCCESS, LOGIN_SUCCESS, LOGGED_IN } from "./types";
+import {
+  REGISTER_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGGED_IN,
+  LOGIN_ERROR,
+} from "./types";
 
 export const registerSuccess = (values) => {
   return (dispatch) => {
@@ -22,24 +27,28 @@ export const loginSuccess = (values) => {
     Axios.post("http://localhost:4444/login/success", values)
       .then((res) => {
         const response = res.data;
-        localStorage.setItem("ecom", res.data);
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: response,
-          isLogin: true,
-        });
+        if (res.data.status === 400) {
+          dispatch({
+            type: LOGIN_ERROR,
+            payload: response,
+            isLogin: false,
+          });
+        } else {
+          localStorage.setItem("ecom", res.data);
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: response,
+            isLogin: true,
+          });
+        }
       })
       .catch((err) => {
-        dispatch({
-          isLogin: false,
-        });
         throw new Error(err.response.data.msg);
       });
   };
 };
 
 export const loggedIn = (jwt) => {
-  console.log(jwt);
   return (dispatch) => {
     Axios.get("http://localhost:4444/posts/loggeddata", {
       headers: { authorization: jwt },
@@ -52,7 +61,6 @@ export const loggedIn = (jwt) => {
         });
       })
       .catch((err) => {
-        localStorage.removeItem("ecom");
         throw new Error(err.response.data.msg);
       });
   };

@@ -5,8 +5,6 @@ import Header from "./Header";
 
 function Tracking() {
   const Products = useSelector(({ product }) => product.data);
-
-  console.log(Products);
   return (
     <div>
       <h1>Tracking</h1>

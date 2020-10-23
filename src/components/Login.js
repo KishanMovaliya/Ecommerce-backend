@@ -1,7 +1,7 @@
 import { Button, makeStyles, TextField } from "@material-ui/core";
 import Axios from "axios";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../redux/actions/registerActions";
@@ -40,12 +40,25 @@ function Login(props) {
   const [error, setError] = useState([]);
 
   const dispatch = useDispatch();
-  const login = useSelector(({ register }) => register.data);
-  const isLogin = useSelector(({ register }) => register.isLogin);
+  const userSuccess = useSelector(({ register }) => register.data);
+
+  useEffect(() => {
+    if (userSuccess.length === 0) {
+      props.history.push("/login");
+    } else if (userSuccess.status !== "") {
+      if (userSuccess.status === 400) {
+        setError(userSuccess.msg);
+      } else {
+        props.history.push("/dashboard");
+      }
+    } else {
+      props.history.push("/login");
+    }
+  }, [userSuccess]);
 
   const handleCancle = (e) => {
     e.preventDefault();
-    props.history.push("/");
+    props.history.push("/dashboard");
   };
   const formik = useFormik({
     initialValues: {
@@ -55,10 +68,8 @@ function Login(props) {
     validate,
     onSubmit: (values) => {
       dispatch(loginSuccess(values));
-      props.history.push("/");
     },
   });
-
   return (
     <div className="register-box" align="center">
       <div className="header-register">

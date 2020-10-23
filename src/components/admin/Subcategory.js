@@ -1,59 +1,57 @@
-import { Button, makeStyles, TextField } from "@material-ui/core"
+import { Button, makeStyles, TextField } from "@material-ui/core";
 import Axios from "axios";
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 
-import Sidebar from "./Sidebar"
-
+import Sidebar from "./Sidebar";
 
 const useStyles = makeStyles((theme) => ({
-    formControl: {
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  root: {
+    "& > *": {
       margin: theme.spacing(1),
-      minWidth: 120,
     },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-    root: {
-      "& > *": {
-        margin: theme.spacing(1),
-      },
-    },
-  }));
+  },
+}));
 
+const validate = (values) => {
+  const errors = {};
 
-  const validate = (values) => {
-    const errors = {};
-  
-    if (!values.category) {
-      errors.category = "*";
-    } 
-    if (!values.subcategory) {
-        errors.subcategory = "*";
-    } 
-    return errors;
+  if (!values.category) {
+    errors.category = "*";
+  }
+  if (!values.subcategory) {
+    errors.subcategory = "*";
+  }
+  return errors;
+};
+
+function Subcategory(props) {
+  const classes = useStyles();
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubCategories] = useState([]);
+  const [error, setError] = useState([]);
+
+  const selectAllSubCategories = () => {
+    return Axios.get("http://localhost:4444/subcategories/selectall")
+      .then((res) => {
+        setSubCategories(res.data);
+      })
+      .catch((err) => {
+        setError(err);
+      });
   };
 
-function Subcategory(props){
-    const classes = useStyles();
-    const [categories, setCategories] = useState([]);
-    const [subcategories, setSubCategories] = useState([]);
-    const [error, setError] = useState([]);
+  useEffect(() => {
+    selectAllSubCategories();
 
-    const selectAllSubCategories = () => {
-      return Axios.get("http://localhost:4444/subcategories/selectall")
-                .then((res) => {
-                  setSubCategories(res.data);
-                })
-                .catch((err) => {
-                    setError(err);    
-                });
-    }
-
-    useEffect(() => { 
-      selectAllSubCategories();
-
-      Axios.get("http://localhost:4444/categories/selectall")
+    Axios.get("http://localhost:4444/categories/selectall")
       .then((res) => {
         setCategories(res.data);
       })
@@ -63,84 +61,86 @@ function Subcategory(props){
           setError(err.response.data.msg);
         }
       });
-    }, [])
+  }, []);
 
-    const handleDelete = (e, id) => {
-      e.preventDefault();
-      Axios
-      .delete(`http://localhost:4444/subcategories/delete/${id}`)
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    Axios.delete(`http://localhost:4444/subcategories/delete/${id}`)
       .then((res) => {
-        alert("Record Deleted Successfully."); 
+        alert("Record Deleted Successfully.");
         selectAllSubCategories();
       })
       .catch((err) => {
-          console.log(err);
+        console.log(err);
       });
-    }
-    const handleUpdate = (e, id) => {
-      e.preventDefault();
-      Axios
-      .get(`http://localhost:4444/subcategories/select/${id}`)
+  };
+  const handleUpdate = (e, id) => {
+    e.preventDefault();
+    Axios.get(`http://localhost:4444/subcategories/select/${id}`)
       .then((res) => {
         formik.values.category = res.data.categoryId;
         formik.values.subcategory = res.data.subcategory;
         formik.values._id = res.data._id;
 
-      
         selectAllSubCategories();
       })
       .catch((err) => {
-          console.log(err);
+        console.log(err);
       });
-    }
+  };
 
+  const formik = useFormik({
+    initialValues: {
+      _id: "",
+      subcategory: "",
+      category: "",
+    },
+    validate,
+    onSubmit: (values) => {
+      console.log(values);
+      if (values._id) {
+        Axios.put(
+          `http://localhost:4444/subcategories/update/${values._id}`,
+          values
+        )
+          .then((res) => {
+            setError("Updated Successfully");
+            values.category = "";
+            values.subcategory = "";
+            values._id = "";
+            selectAllSubCategories();
+          })
+          .catch((err) => {
+            console.log(err);
+            if (err.response.status === 400) {
+              setError(err.response.data.msg);
+            }
+          });
+      } else {
+        Axios.post(
+          `http://localhost:4444/subcategories/create/${values.category}`,
+          values
+        )
+          .then((res) => {
+            setError("Created Successfully");
+            values.subcategory = "";
+            values.category = "";
+            selectAllSubCategories();
+          })
+          .catch((err) => {
+            console.log(err);
+            if (err.response.status === 400) {
+              setError(err.response.data.msg);
+            }
+          });
+      }
+    },
+  });
 
-    const formik = useFormik({
-      initialValues: {
-          _id:"",
-          subcategory: "",
-          category: "",         
-      },
-      validate,
-      onSubmit: (values) => {
-        console.log(values);
-        if(values._id){ 
-          Axios.put(`http://localhost:4444/subcategories/update/${values._id}`, values)
-            .then((res) => {
-              setError("Updated Successfully");
-              values.category="";
-              values.subcategory="";
-              values._id="";
-              selectAllSubCategories();
-            })
-            .catch((err) => {
-              console.log(err);
-              if (err.response.status === 400) {
-                setError(err.response.data.msg);
-              }
-            });
-        } else {
-          Axios.post(`http://localhost:4444/subcategories/create/${values.category}`, values)
-            .then((res) => {
-              setError("Created Successfully");
-              values.subcategory="";
-              values.category="";
-              selectAllSubCategories();
-            })
-            .catch((err) => {
-              console.log(err);
-              if (err.response.status === 400) {
-                setError(err.response.data.msg);
-              }
-            });
-        }
-      },
-    }); 
-
-    return (
-      <>
-        <div className="col-md-4 col-sm-12">
-        {error ? <i style={{color:"red"}}>{error}</i> : ""}
+  return (
+    <>
+      <div className="col-md-4 col-sm-12">
+        {error ? <i style={{ color: "red" }}>{error}</i> : ""}
         <form
           method="post"
           className={classes.root}
@@ -148,49 +148,58 @@ function Subcategory(props){
           autoComplete="off"
           onSubmit={formik.handleSubmit}
         >
-          {formik.values._id ? <>
-            <input type="hidden" value={formik.values._id} name="_id" /> 
-            <div className="form-group">
+          {formik.values._id ? (
+            <>
+              <input type="hidden" value={formik.values._id} name="_id" />
+              <div className="form-group">
                 <label htmlFor="category">Category : </label>
                 <select
                   className="browser-default custom-select"
                   name="category"
                   onChange={formik.handleChange}
                   value={formik.values.category}
-                  >
+                >
                   {categories.map((category) => {
-                    if(category._id == formik.values.category){
-                      return <option key={category._id} value={formik.values.category}>{category.category}</option>
+                    if (category._id === formik.values.category) {
+                      return (
+                        <option
+                          key={category._id}
+                          value={formik.values.category}
+                        >
+                          {category.category}
+                        </option>
+                      );
                     }
-
-                  }
-                  )}  
-                  
+                  })}
                 </select>
               </div>
             </>
-            : 
+          ) : (
             <div className="form-group">
-            <label htmlFor="category">Category : </label>
-            <select
-              className="browser-default custom-select"
-              name="category"
-              onChange={formik.handleChange}
-              value={formik.values.category}
+              <label htmlFor="category">Category : </label>
+              <select
+                className="browser-default custom-select"
+                name="category"
+                onChange={formik.handleChange}
+                value={formik.values.category}
               >
-              <option value="">--Select Category--</option>
-              {categories.map((category) => 
-                <option key={category._id} value={category._id}>{category.category}</option>
-                )}  
-              
-            </select>
-          </div>}
+                <option value="">--Select Category--</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.category}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <i style={{ position: "absolute", color: "red" }}>
-            {formik.errors.category ? <div>{formik.errors.category}</div> : null}
+            {formik.errors.category ? (
+              <div>{formik.errors.category}</div>
+            ) : null}
           </i>
           <br />
-          
+
           <TextField
             id="standard-basic"
             label="Sub Category"
@@ -201,7 +210,9 @@ function Subcategory(props){
             value={formik.values.subcategory}
           />
           <i style={{ position: "absolute", color: "red" }}>
-            {formik.errors.subcategory ? <div>{formik.errors.subcategory}</div> : null}
+            {formik.errors.subcategory ? (
+              <div>{formik.errors.subcategory}</div>
+            ) : null}
           </i>
           <br />
           <Button
@@ -220,37 +231,41 @@ function Subcategory(props){
             Cancle
           </Button>
         </form>
-        </div>
-        <div className="col-md-8 col-sm-12">
-          <table border="1" width="100%">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Sub Category</th>
-                <th>action</th>
-              </tr>
-            </thead>
-            <tbody>
-            {subcategories.map((subcategory) => 
-              <tr key={subcategory._id}>                
+      </div>
+      <div className="col-md-8 col-sm-12">
+        <table border="1" width="100%">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Sub Category</th>
+              <th>action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {subcategories.map((subcategory) => (
+              <tr key={subcategory._id}>
                 {categories.map((category) => {
-                  if(category._id === subcategory.categoryId){
+                  if (category._id === subcategory.categoryId) {
                     return <td>{category.category}</td>;
                   }
                 })}
 
                 <td>{subcategory.subcategory}</td>
-                <td> 
-                  <button onClick={(e) => handleDelete(e,subcategory._id)}>Delete</button>
-                  <button onClick={(e) => handleUpdate(e,subcategory._id)}>Update</button>
+                <td>
+                  <button onClick={(e) => handleDelete(e, subcategory._id)}>
+                    Delete
+                  </button>
+                  <button onClick={(e) => handleUpdate(e, subcategory._id)}>
+                    Update
+                  </button>
                 </td>
               </tr>
-            )}
-            </tbody>
-          </table>
-        </div>
-      </>
-    )
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
 }
 
-export default Sidebar(Subcategory)
+export default Sidebar(Subcategory);

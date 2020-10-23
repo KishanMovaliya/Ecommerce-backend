@@ -15,6 +15,7 @@ import Tracking from "./Tracking";
 
 import { Provider } from "react-redux";
 import store from "../redux/store";
+import ProductDetails from "./ProductDetails";
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
             <Route path="/admin/product" component={Product} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/allproduct" component={AllProduct} />
+            <Route
+              path="/productdetails/:productId"
+              component={ProductDetails}
+            />
             <Route path="/tracking" component={Tracking} />
           </UserAuthentication>
         </Switch>

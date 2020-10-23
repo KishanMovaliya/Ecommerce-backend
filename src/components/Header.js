@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
 import UserNav from "./UserNav";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getJwt } from "../helper/jwt";
 import Axios from "axios";
+import { loggedIn } from "../redux/actions/registerActions";
 
 function Header(Childcomponent) {
   return function ResponsiveHeader(props) {
-    const [user, setUser] = useState();
+    const dispatch = useDispatch();
+    const userLoggedin = useSelector(({ register }) => register.data);
 
     useEffect(() => {
       const jwt = getJwt();
       if (!jwt) {
         props.history.push("/");
+      } else {
+        dispatch(loggedIn(jwt));
+        if (userLoggedin.status === 0) {
+          props.history.push("/admin/dashboard");
+        }
       }
-      console.log("called");
-
-      Axios.get("http://localhost:4444/posts/loggeddata", {
-        headers: { authorization: jwt },
-      })
-        .then((res) => {
-          setUser([res.data]);
-          if (res.data.status === 0) {
-            props.history.push("/admin/dashboard");
-          }
-        })
-        .catch((error) => {
-          localStorage.removeItem("ecom");
-        });
-    }, []);
-
+    }, [userLoggedin]);
     const handleLogout = () => {
       localStorage.removeItem("ecom");
       props.history.push("/login");
@@ -43,10 +36,9 @@ function Header(Childcomponent) {
             <UserNav />
           </div>
 
-          {Boolean(user) ? (
+          {userLoggedin._id ? (
             <div className="col-md-3 col-sm-12">
-              {user[0].email}
-
+              {userLoggedin.email}
               <button className="btn btn-info " onClick={handleLogout}>
                 logout
               </button>

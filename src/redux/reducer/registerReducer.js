@@ -1,4 +1,12 @@
-import { REGISTER_SUCCESS, LOGIN_SUCCESS, LOGGED_IN } from "../actions/types";
+import { getJwt } from "../../helper/jwt";
+import {
+  REGISTER_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGGED_IN,
+  LOGIN_ERROR,
+} from "../actions/types";
+
+const jwt = getJwt();
 
 const initialState = {
   data: [],
@@ -27,6 +35,14 @@ export default function (state = initialState, action) {
         data: action.payload,
         loading: false,
       };
+
+    case LOGIN_ERROR:
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+      };
+
     default:
       return state;
   }

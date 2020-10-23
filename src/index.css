@@ -1,4 +1,5 @@
 body {
+  scroll-behavior: smooth;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -60,4 +61,76 @@ ul.list-style-none {
   color: white;
   width: 100%;
   height: 100%;
+}
+.imgshadow {
+  box-shadow: 2px 2px 4px #ccc;
+}
+.borderradius5 {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.productbody {
+  margin: 50px auto;
+}
+.mp0 {
+  padding: 0;
+  margin: 0;
+}
+.detailscomponent {
+  padding: 50px 0px 50px 50px;
+}
+.p0 {
+  padding: 0;
+}
+.m3 {
+  margin: 3px;
+}
+.mtb20 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.btnaddtocart {
+  width: 100%;
+  background-color: hotpink;
+  border: 1px solid hotpink;
+  padding: 14px;
+  font-size: 22px;
+  color: white;
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  -ms-border-radius: 100px;
+  -o-border-radius: 100px;
+}
+.btnaddtocart:hover {
+  background-color: white;
+  color: hotpink;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+.btnwishlist {
+  width: 100%;
+  background-color: white;
+  border: 1px solid hotpink;
+  padding: 14px;
+  font-size: 22px;
+  color: hotpink;
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  -ms-border-radius: 100px;
+  -o-border-radius: 100px;
+}
+.grabbing {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+.btnwishlist:hover {
+  background-color: hotpink;
+  color: white;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
 }

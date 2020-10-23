@@ -7,7 +7,7 @@ function UserNav() {
       <div>
         <ul className="list-style-none lineheight10">
           <li className="padding20 lifont">
-            <Link to="/" className="color-darkslategray">
+            <Link to="/dashboard" className="color-darkslategray">
               Home
             </Link>
           </li>

@@ -1,8 +1,13 @@
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGGED_IN = "LOGGED_IN";
+export const LOGIN_ERROR = "LOGIN_ERROR";
+
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
+export const PRODUCT_DETAILS = "PRODUCT_DETAILS";
 
-export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGGED_IN = "LOGGED_IN";
+export const GET_CATEGORY = "GET_CATEGORY";
+export const GET_SUBCATEGORY = "GET_SUBCATEGORY";

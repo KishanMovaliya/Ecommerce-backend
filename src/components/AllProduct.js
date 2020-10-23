@@ -18,6 +18,9 @@ import Link from "@material-ui/core/Link";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts } from "../redux/actions/productActions";
+import { loggedIn } from "../redux/actions/registerActions";
+import { getJwt } from "../helper/jwt";
+import { PinDropSharp } from "@material-ui/icons";
 
 function Copyright() {
   return (
@@ -64,18 +67,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AllProduct() {
+function AllProduct(props) {
   const classes = useStyles();
   const Products = useSelector(({ product }) => product.data);
   const dispatch = useDispatch();
-
+  const jwt = getJwt();
   useEffect(() => {
     dispatch(getProducts());
-  }, []);
+    if (jwt) {
+      dispatch(loggedIn(jwt));
+    }
+  }, [Products]);
 
   const handleProductView = (e, id) => {
     e.preventDefault();
     console.log(id);
+    props.history.push(`/productdetails/${id}`);
   };
   return (
     <React.Fragment>
@@ -110,10 +117,10 @@ function AllProduct() {
           {/* End hero unit */}
           <Grid container spacing={4}>
             {Products.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+              <Grid item key={card._id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
-                    className={classes.cardMedia}
+                    className={`${classes.cardMedia} imgshadow`}
                     image={`http://localhost:4444/${card.images}`}
                     title="Image title"
                   />
@@ -121,9 +128,9 @@ function AllProduct() {
                     <span className="col-md-6 col-sm-12">
                       <b>{card.title}</b>
                     </span>
-                    <span className="col-md-6 col-sm-12">
+                    {/* <span className="col-md-6 col-sm-12">
                       {card.descriptions}
-                    </span>
+                    </span> */}
                   </CardContent>
                   <CardContent className={classes.cardContent}>
                     <span className="col-md-6 col-sm-12">

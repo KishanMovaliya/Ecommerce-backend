@@ -13,9 +13,12 @@ function Authentication(props) {
     const jwt = getJwt();
 
     if (jwt) {
-      dispatch(loggedIn());
+      dispatch(loggedIn(jwt));
+      if (userLoggedIn.status === 0) {
+        props.history.push("/admin/dashboard");
+      }
     } else {
-      props.history.push("/dashboard");
+      props.history.push("/");
     }
   }, []);
   return <div>{props.children}</div>;
