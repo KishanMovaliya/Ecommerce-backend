@@ -17,6 +17,11 @@ const schemaAddToCart = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  qty: {
+    type: Number,
+    required: true,
+    default: 1,
+  },
 });
 
 module.exports = mongoose.model("Addtocart", schemaAddToCart);
