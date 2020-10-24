@@ -11,7 +11,7 @@ function Authentication(props) {
 
   useEffect(() => {
     const jwt = getJwt();
-
+    console.log("hello");
     if (jwt) {
       dispatch(loggedIn(jwt));
       if (userLoggedIn.status === 0) {

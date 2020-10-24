@@ -6,15 +6,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSingleProduct } from "../redux/actions/productActions";
 import { getCategory } from "../redux/actions/categoryActions";
 import { getSubCategory } from "../redux/actions/subcategoryActions";
+import { getJwt } from "../helper/jwt";
+import { addtocartProduct } from "../redux/actions/addtocartActions";
 
 function ProductDetails(props) {
   const productId = props.match.params.productId;
+
+  const jwt = getJwt();
 
   const dispatch = useDispatch();
   const singleProduct = useSelector(({ product }) => product.data);
   const singleCategory = useSelector(({ category }) => category.data);
   const singleSubCategory = useSelector(({ subcategory }) => subcategory.data);
   const isloading = useSelector(({ product }) => product.loading);
+
+  const addtocart = useSelector(({ addtocart }) => addtocart.data);
 
   // const deplay = (ms) =>
   //   new Promise((reslove, reject) => setTimeout(() => reslove(), ms));
@@ -28,13 +34,16 @@ function ProductDetails(props) {
 
   const handleAddToCart = (e, singleProduct) => {
     e.preventDefault();
-    console.log(singleProduct);
+
+    dispatch(addtocartProduct(singleProduct, jwt));
+    if (addtocart !== null) {
+      props.history.push(`/addtocart`);
+    }
   };
 
   if (isloading) {
     return <div>loading....</div>;
   }
-
   return (
     <>
       <div className="container">

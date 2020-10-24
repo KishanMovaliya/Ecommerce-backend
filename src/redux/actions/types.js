@@ -11,3 +11,5 @@ export const PRODUCT_DETAILS = "PRODUCT_DETAILS";
 
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_SUBCATEGORY = "GET_SUBCATEGORY";
+
+export const ADD_TO_CART = "ADD_TO_CART";

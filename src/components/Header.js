@@ -32,17 +32,27 @@ function Header(Childcomponent) {
           <div className="offset-md-1 col-md-4 col-sm-12">
             <h3 className="headertitile">E-commerce</h3>
           </div>
-          <div className="col-md-4 col-sm-12">
+          <div className="col-md-3 col-sm-12">
             <UserNav />
           </div>
 
           {userLoggedin._id ? (
-            <div className="col-md-3 col-sm-12">
-              {userLoggedin.email}
-              <button className="btn btn-info " onClick={handleLogout}>
-                logout
-              </button>
-            </div>
+            <>
+              <div className="col-md-1 col-sm-12 ">
+                <a href="/addtocart">
+                  <i
+                    class="fa fa-shopping-cart addtocarticon"
+                    aria-hidden="true"
+                  ></i>
+                </a>
+              </div>
+              <div className="col-md-3 col-sm-12">
+                {userLoggedin.email}
+                <button className="btn btn-info " onClick={handleLogout}>
+                  logout
+                </button>
+              </div>
+            </>
           ) : (
             <div className="col-md-3 col-sm-12">
               <button

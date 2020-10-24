@@ -134,3 +134,21 @@ ul.list-style-none {
   cursor: -webkit-grabbing;
   cursor: grabbing;
 }
+.addtocarticon {
+  font-size: 28px;
+  padding: 12px;
+  background-color: thistle;
+  border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
+}
+.qtybox {
+  padding: 7px 15px;
+  border: 1px solid #ccc;
+}
+.qtyaction:hover {
+  cursor: -webkit-wait;
+  cursor: wait;
+}

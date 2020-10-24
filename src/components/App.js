@@ -16,6 +16,7 @@ import Tracking from "./Tracking";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import ProductDetails from "./ProductDetails";
+import Addtocart from "./Addtocart";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               path="/productdetails/:productId"
               component={ProductDetails}
             />
+            <Route path="/addtocart" component={Addtocart} />
             <Route path="/tracking" component={Tracking} />
           </UserAuthentication>
         </Switch>
