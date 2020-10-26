@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "./Header";
 
 function Tracking() {
-  const Products = useSelector(({ product }) => product.data);
   return (
     <div>
       <h1>Tracking</h1>

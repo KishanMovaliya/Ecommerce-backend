@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { GET_SUBCATEGORY } from "./types";
+import { GET_SUBCATEGORY, GET_ALL_SUBCATEGORY } from "./types";
 
 export const getSubCategory = (id) => {
   return (dispatch) => {
@@ -12,5 +12,17 @@ export const getSubCategory = (id) => {
         });
       }
     );
+  };
+};
+
+export const getAllSubCategory = () => {
+  return (dispatch) => {
+    Axios.get(`http://localhost:4444/subcategories/selectall`).then((res) => {
+      const response = res.data;
+      dispatch({
+        type: GET_ALL_SUBCATEGORY,
+        payload: response,
+      });
+    });
   };
 };

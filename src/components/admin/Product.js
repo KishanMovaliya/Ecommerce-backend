@@ -37,7 +37,6 @@ function Product(props) {
         setShowProduct(res.data);
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -50,7 +49,6 @@ function Product(props) {
         setAllSubCategory(res.data);
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -65,7 +63,6 @@ function Product(props) {
         setCategories(res.data);
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -80,7 +77,6 @@ function Product(props) {
         setSubCategories(res.data);
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -115,7 +111,6 @@ function Product(props) {
         selectAllProduct();
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -129,7 +124,6 @@ function Product(props) {
         setProductDetails(res.data);
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -156,13 +150,11 @@ function Product(props) {
           selectAllProduct();
         })
         .catch((err) => {
-          console.log(err);
           if (err.response.data.status === 400) {
             setError(err.response.data.msg);
           }
         });
     } else {
-      console.log("product : ", productDetails);
       const data = new FormData();
       data.append("title", productDetails.title);
       data.append("descriptions", productDetails.descriptions);
@@ -179,14 +171,13 @@ function Product(props) {
           selectAllProduct();
         })
         .catch((err) => {
-          console.log(err);
           if (err.response.data.status === 400) {
             setError(err.response.data.msg);
           }
         });
     }
   };
-  console.log("product : ", productDetails);
+
   const handleReset = (e) => {
     e.persist();
     setProductDetails({

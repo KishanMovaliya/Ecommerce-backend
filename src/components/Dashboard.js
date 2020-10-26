@@ -11,8 +11,8 @@ import { loggedIn } from "../redux/actions/registerActions";
 function Dashboard(props) {
   const jwt = getJwt();
   const dispatch = useDispatch();
-  const Products = useSelector(({ product }) => product.data);
-  const isloading = useSelector(({ product }) => product.loading);
+  const Products = useSelector(({ products }) => products.data);
+  const isloading = useSelector(({ products }) => products.loading);
 
   // const userLoggedIn = useSelector(({ register }) => register.data);
   // const deplay = (ms) =>

@@ -4,11 +4,17 @@ import registerReducer from "./registerReducer";
 import categoryReducer from "./categoryReducer";
 import subcategoryReducer from "./subcategoryReducer";
 import addtocartReducer from "./addtocartReducer";
+import singleproductReducer from "./singleproductReducer";
+import loginReducer from "./loginReducer";
+import userproductcartReducer from "./userproductcartReducer";
 
 export default combineReducers({
-  product: productReducer,
+  singleproduct: singleproductReducer,
+  products: productReducer,
   register: registerReducer,
+  login: loginReducer,
   category: categoryReducer,
   subcategory: subcategoryReducer,
   addtocart: addtocartReducer,
+  userproductcart: userproductcartReducer,
 });

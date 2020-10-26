@@ -53,14 +53,13 @@ function Register(props) {
     },
     validate,
     onSubmit: (values) => {
-      console.log(values);
       dispatch(registerSuccess(values));
       if (register != []) {
         props.history.push("/login");
       }
     },
   });
-  console.log("register", register);
+
   return (
     <div className="register-box" align="center">
       <div className="header-register">

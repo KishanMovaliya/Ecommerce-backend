@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../redux/actions/registerActions";
+import { loginSuccess } from "../redux/actions/loginActions";
 
 import { Link } from "react-router-dom";
 
@@ -40,10 +40,10 @@ function Login(props) {
   const [error, setError] = useState([]);
 
   const dispatch = useDispatch();
-  const userSuccess = useSelector(({ register }) => register.data);
+  const userSuccess = useSelector(({ login }) => login.data);
 
   useEffect(() => {
-    if (userSuccess.length === 0) {
+    if (userSuccess === null || userSuccess.length === 0) {
       props.history.push("/login");
     } else if (userSuccess.status !== "") {
       if (userSuccess.status === 400) {

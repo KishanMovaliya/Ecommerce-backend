@@ -56,7 +56,6 @@ function Subcategory(props) {
         setCategories(res.data);
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.data.status === 400) {
           setError(err.response.data.msg);
         }
@@ -97,7 +96,6 @@ function Subcategory(props) {
     },
     validate,
     onSubmit: (values) => {
-      console.log(values);
       if (values._id) {
         Axios.put(
           `http://localhost:4444/subcategories/update/${values._id}`,
@@ -111,7 +109,6 @@ function Subcategory(props) {
             selectAllSubCategories();
           })
           .catch((err) => {
-            console.log(err);
             if (err.response.status === 400) {
               setError(err.response.data.msg);
             }
@@ -128,7 +125,6 @@ function Subcategory(props) {
             selectAllSubCategories();
           })
           .catch((err) => {
-            console.log(err);
             if (err.response.status === 400) {
               setError(err.response.data.msg);
             }

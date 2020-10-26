@@ -43,42 +43,39 @@ function Sidebar(Childcomponent) {
           <div className="col-md-10">
             <div className="row">
               <div className="col-md-12 col-sm-12">
-              {user ? (
-              <div className="offset-md-5 col-md-3 col-sm-12">
-                {user[0].email.split("@")[0]}
+                {user ? (
+                  <div className="offset-md-5 col-md-3 col-sm-12">
+                    {user[0].email.split("@")[0]}
 
-                <button className="btn btn-info " onClick={handleLogout}>
-                  logout
-                </button>
+                    <button className="btn btn-info " onClick={handleLogout}>
+                      logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="col-md-3 col-sm-12">
+                    <button
+                      className="btn btn-primary   "
+                      onClick={() => {
+                        props.history.push("/login");
+                      }}
+                    >
+                      Login
+                    </button>
+                    <button
+                      className="btn btn-info "
+                      onClick={() => {
+                        props.history.push("/register");
+                      }}
+                    >
+                      Register
+                    </button>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="col-md-3 col-sm-12">
-                <button
-                  className="btn btn-primary   "
-                  onClick={() => {
-                    props.history.push("/login");
-                  }}
-                >
-                  Login
-                </button>
-                <button
-                  className="btn btn-info "
-                  onClick={() => {
-                    props.history.push("/register");
-                  }}
-                >
-                  Register
-                </button>
-              </div>
-            )}
-            </div>   
-                <Childcomponent {...props} />
+              <Childcomponent {...props} />
             </div>
-           
           </div>
         </div>
-
-        
       </div>
     );
   };

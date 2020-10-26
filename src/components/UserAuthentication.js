@@ -3,15 +3,15 @@ import { getJwt } from "../helper/jwt";
 import { withRouter } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { loggedIn, loginSuccess } from "../redux/actions/registerActions";
+import { loggedIn, loginSuccess } from "../redux/actions/loginActions";
 
 function Authentication(props) {
   const dispatch = useDispatch();
-  const userLoggedIn = useSelector(({ register }) => register.data);
+  const userLoggedIn = useSelector(({ login }) => login.data);
 
   useEffect(() => {
     const jwt = getJwt();
-    console.log("hello");
+
     if (jwt) {
       dispatch(loggedIn(jwt));
       if (userLoggedIn.status === 0) {

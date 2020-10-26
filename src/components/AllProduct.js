@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 function AllProduct(props) {
   const classes = useStyles();
-  const Products = useSelector(({ product }) => product.data);
+  const Products = useSelector(({ products }) => products.data);
   const dispatch = useDispatch();
   const jwt = getJwt();
   useEffect(() => {
@@ -77,11 +77,10 @@ function AllProduct(props) {
     // if (jwt) {
     //   dispatch(loggedIn(jwt));
     // }
-  }, [Products]);
+  }, []);
 
   const handleProductView = (e, id) => {
     e.preventDefault();
-    console.log(id);
     props.history.push(`/productdetails/${id}`);
   };
   return (
@@ -116,25 +115,25 @@ function AllProduct(props) {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {Products.map((card) => (
-              <Grid item key={card._id} xs={12} sm={6} md={4}>
+            {Products.map((products) => (
+              <Grid item key={products._id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={`${classes.cardMedia} imgshadow`}
-                    image={`http://localhost:4444/${card.images}`}
+                    image={`http://localhost:4444/${products.images}`}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
                     <span className="col-md-6 col-sm-12">
-                      <b>{card.title}</b>
+                      <b>{products.title}</b>
                     </span>
                     {/* <span className="col-md-6 col-sm-12">
-                      {card.descriptions}
+                      {products.descriptions}
                     </span> */}
                   </CardContent>
                   <CardContent className={classes.cardContent}>
                     <span className="col-md-6 col-sm-12">
-                      <b>&#x20B9; {card.price}</b>
+                      <b>&#x20B9; {products.price}</b>
                     </span>
                   </CardContent>
                   <CardActions>
@@ -144,7 +143,7 @@ function AllProduct(props) {
                     <Button
                       size="small"
                       color="primary"
-                      onClick={(e) => handleProductView(e, card._id)}
+                      onClick={(e) => handleProductView(e, products._id)}
                     >
                       view
                     </Button>

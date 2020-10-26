@@ -1,9 +1,32 @@
-import React from "react";
+import { DragHandle } from "@material-ui/icons";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getJwt } from "../helper/jwt";
+import { deleteProductFromUserCart } from "../redux/actions/addtocartActions";
+import { getAllCategory } from "../redux/actions/categoryActions";
+import { getAllSubCategory } from "../redux/actions/subcategoryActions";
+import { getUserProductCart } from "../redux/actions/userproductcartActions";
 import Header from "./Header";
 
 function Addtocart() {
+  const dispatch = useDispatch();
+  const cartDetails = useSelector(
+    ({ userproductcart }) => userproductcart.data
+  );
+  const jwt = getJwt();
+
+  useEffect(() => {
+    dispatch(getUserProductCart(jwt));
+  }, []);
+
+  const handleDeleteAddCart = (e, id) => {
+    e.preventDefault();
+    dispatch(deleteProductFromUserCart(jwt, id));
+    dispatch(getUserProductCart(jwt));
+  };
+
   return (
-    <div class="px-4 px-lg-0">
+    <div className="px-4 px-lg-0">
       <div className="pb-5">
         <div className="container">
           <div className="row">
@@ -27,47 +50,76 @@ function Addtocart() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row" className="border-0">
-                        <div className="p-2">
-                          <img
-                            src="https://res.cloudinary.com/mhmd/image/upload/v1556670479/product-1_zrifhn.jpg"
-                            alt=""
-                            width="70"
-                            className="img-fluid rounded shadow-sm"
-                          />
-                          <div className="ml-3 d-inline-block align-middle">
-                            <h5 className="mb-0">
-                              {" "}
+                    {cartDetails !== null
+                      ? cartDetails.data.map((cartDetail) => (
+                          <tr key={cartDetail._id}>
+                            <th scope="row" className="border-0">
+                              <div className="p-2">
+                                <img
+                                  src={`http://localhost:4444/${cartDetail.productId.images}`}
+                                  alt=""
+                                  width="70"
+                                  height="70"
+                                  className="img-fluid rounded shadow-sm"
+                                />
+                                <div className="ml-3 d-inline-block align-middle">
+                                  <h5 className="mb-0">
+                                    {" "}
+                                    <a
+                                      href="#"
+                                      className="text-dark d-inline-block align-middle"
+                                    >
+                                      {cartDetail.productId.title}
+                                    </a>
+                                  </h5>
+                                  <span className="text-muted font-weight-normal font-italic d-block">
+                                    Category:{" "}
+                                    {cartDetail.productId.categoryId.category}
+                                    &nbsp;&nbsp;&nbsp;&nbsp; Sub-Category:{" "}
+                                    {
+                                      cartDetail.productId.subcategoryId
+                                        .subcategory
+                                    }
+                                  </span>
+                                </div>
+                              </div>
+                            </th>
+                            <td className="border-0 align-middle">
+                              <strong>
+                                &#x20B9; {cartDetail.productId.price}
+                              </strong>
+                            </td>
+                            <td className="border-0 align-middle">
+                              <div className="qtyboxborder">
+                                <strong className="qtybox qtyaction">-</strong>
+                                <strong className="qtybox">
+                                  {cartDetail.qty}
+                                </strong>
+                                <strong
+                                  className="qtybox qtyaction"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    console.log(cartDetail.qty);
+                                  }}
+                                >
+                                  +
+                                </strong>
+                              </div>
+                            </td>
+                            <td className="border-0 align-middle">
                               <a
                                 href="#"
-                                className="text-dark d-inline-block align-middle"
+                                className="text-dark"
+                                onClick={(e) =>
+                                  handleDeleteAddCart(e, cartDetail._id)
+                                }
                               >
-                                Timex Unisex Originals
+                                <i className="fa fa-trash"></i>
                               </a>
-                            </h5>
-                            <span className="text-muted font-weight-normal font-italic d-block">
-                              Category: Watches
-                            </span>
-                          </div>
-                        </div>
-                      </th>
-                      <td className="border-0 align-middle">
-                        <strong>&#x20B9; 79.00</strong>
-                      </td>
-                      <td className="border-0 align-middle">
-                        <div className="qtyboxborder">
-                          <strong className="qtybox qtyaction">-</strong>
-                          <strong className="qtybox">3</strong>
-                          <strong className="qtybox qtyaction">+</strong>
-                        </div>
-                      </td>
-                      <td className="border-0 align-middle">
-                        <a href="#" className="text-dark">
-                          <i className="fa fa-trash"></i>
-                        </a>
-                      </td>
-                    </tr>
+                            </td>
+                          </tr>
+                        ))
+                      : "Add product on your cart list"}
                   </tbody>
                 </table>
               </div>

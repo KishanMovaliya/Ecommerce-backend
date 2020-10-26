@@ -3,11 +3,12 @@ import React, { useEffect } from "react";
 import Header from "./Header";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleProduct } from "../redux/actions/productActions";
+import { getSingleProduct } from "../redux/actions/singleproductActions";
 import { getCategory } from "../redux/actions/categoryActions";
 import { getSubCategory } from "../redux/actions/subcategoryActions";
 import { getJwt } from "../helper/jwt";
 import { addtocartProduct } from "../redux/actions/addtocartActions";
+import { getUserProductCart } from "../redux/actions/userproductcartActions";
 
 function ProductDetails(props) {
   const productId = props.match.params.productId;
@@ -15,10 +16,10 @@ function ProductDetails(props) {
   const jwt = getJwt();
 
   const dispatch = useDispatch();
-  const singleProduct = useSelector(({ product }) => product.data);
+  const singleProduct = useSelector(({ singleproduct }) => singleproduct.data);
   const singleCategory = useSelector(({ category }) => category.data);
   const singleSubCategory = useSelector(({ subcategory }) => subcategory.data);
-  const isloading = useSelector(({ product }) => product.loading);
+  const isloading = useSelector(({ singleproduct }) => singleproduct.loading);
 
   const addtocart = useSelector(({ addtocart }) => addtocart.data);
 
@@ -28,14 +29,18 @@ function ProductDetails(props) {
   useEffect(() => {
     // deplay(2000);
     dispatch(getSingleProduct(productId));
-    dispatch(getCategory(singleProduct.categoryId));
-    dispatch(getSubCategory(singleProduct.subcategoryId));
+  }, []);
+  useEffect(() => {
+    if (singleProduct) {
+      dispatch(getCategory(singleProduct.categoryId));
+      dispatch(getSubCategory(singleProduct.subcategoryId));
+    }
   }, [singleProduct]);
-
   const handleAddToCart = (e, singleProduct) => {
     e.preventDefault();
-
+    console.log(jwt, singleProduct);
     dispatch(addtocartProduct(singleProduct, jwt));
+    dispatch(getUserProductCart(jwt));
     if (addtocart !== null) {
       props.history.push(`/addtocart`);
     }
@@ -59,19 +64,21 @@ function ProductDetails(props) {
           <div className="col-md-8 col-lg-8 col-12 mp0 detailscomponent">
             <div className="row">
               <div className="col-md-12 col-lg-12 col-12">
-                <span>{singleCategory.category}</span> &nbsp;
-                <span>{singleSubCategory.subcategory}</span>
+                <span>{singleCategory && singleCategory.category}</span> &nbsp;
+                <span>
+                  {singleSubCategory && singleSubCategory.subcategory}
+                </span>
               </div>
               <div className="col-md-12 col-lg-12 col-12">
                 <span>
-                  <h2>{singleProduct.title}</h2>
-                  <p>{singleProduct.descriptions}</p>
+                  <h2>{singleProduct && singleProduct.title}</h2>
+                  <p>{singleProduct && singleProduct.descriptions}</p>
                 </span>
               </div>
               <div className="col-md-12 col-lg-12 col-12">
                 <span>
                   <h1>
-                    <b>&#x20B9; {singleProduct.price}</b>
+                    <b>&#x20B9; {singleProduct && singleProduct.price}</b>
                   </h1>
                 </span>
               </div>

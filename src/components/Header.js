@@ -3,13 +3,12 @@ import UserNav from "./UserNav";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getJwt } from "../helper/jwt";
-import Axios from "axios";
-import { loggedIn } from "../redux/actions/registerActions";
+import { loggedIn, loggedOut } from "../redux/actions/loginActions";
 
 function Header(Childcomponent) {
   return function ResponsiveHeader(props) {
     const dispatch = useDispatch();
-    const userLoggedin = useSelector(({ register }) => register.data);
+    const userLoggedin = useSelector(({ login }) => login.data);
 
     useEffect(() => {
       const jwt = getJwt();
@@ -21,11 +20,14 @@ function Header(Childcomponent) {
           props.history.push("/admin/dashboard");
         }
       }
-    }, [userLoggedin]);
+    }, []);
     const handleLogout = () => {
-      localStorage.removeItem("ecom");
-      props.history.push("/login");
+      dispatch(loggedOut());
+      if (userLoggedin.length === 0) {
+        props.history.push("/login");
+      }
     };
+
     return (
       <div className="container-fluid">
         <div className="row mainheader">
@@ -36,12 +38,12 @@ function Header(Childcomponent) {
             <UserNav />
           </div>
 
-          {userLoggedin._id ? (
+          {userLoggedin !== null && userLoggedin.length !== 0 ? (
             <>
               <div className="col-md-1 col-sm-12 ">
                 <a href="/addtocart">
                   <i
-                    class="fa fa-shopping-cart addtocarticon"
+                    className="fa fa-shopping-cart addtocarticon"
                     aria-hidden="true"
                   ></i>
                 </a>
