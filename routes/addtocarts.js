@@ -1,5 +1,4 @@
 const express = require("express");
-const { readSync } = require("fs");
 const verify = require("../middleware/verifyToken");
 const router = express.Router();
 const Addtocart = require("../models/addtocarts");

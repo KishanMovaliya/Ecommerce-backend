@@ -49,6 +49,10 @@ app.use("/products", productsRoute);
 const addtocartsRoute = require("./routes/addtocarts");
 app.use("/addtocarts", addtocartsRoute);
 
+//-----For Checkout Product-----
+const productcheckoutRoute = require("./routes/productcheckouts");
+app.use("/productcheckouts", productcheckoutRoute);
+
 app.listen(4444, () => {
   console.log(`Server Connected on PORT:4444...!`);
 });
