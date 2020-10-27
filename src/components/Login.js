@@ -44,7 +44,7 @@ function Login(props) {
 
   useEffect(() => {
     if (userSuccess === null || userSuccess.length === 0) {
-      props.history.push("/login");
+      // props.history.push("/login");
     } else if (userSuccess.status !== "") {
       if (userSuccess.status === 400) {
         setError(userSuccess.msg);

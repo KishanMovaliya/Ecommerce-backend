@@ -16,11 +16,14 @@ function Header(Childcomponent) {
         props.history.push("/");
       } else {
         dispatch(loggedIn(jwt));
-        if (userLoggedin.status === 0) {
-          props.history.push("/admin/dashboard");
-        }
       }
     }, []);
+    useEffect(() => {
+      if (userLoggedin.status === 0) {
+        props.history.push("/admin/dashboard");
+      }
+    }, [userLoggedin]);
+
     const handleLogout = () => {
       dispatch(loggedOut());
       if (userLoggedin.length === 0) {

@@ -3,10 +3,14 @@ import AdminNav from "./AdminNav";
 
 import Axios from "axios";
 import { getJwt } from "../../helper/jwt";
+import { useDispatch, useSelector } from "react-redux";
+import { loggedOut } from "../../redux/actions/loginActions";
 
 function Sidebar(Childcomponent) {
   return function ResponsiveHeader(props) {
     const [user, setUser] = useState();
+    const dispatch = useDispatch();
+    const userLoggedin = useSelector(({ login }) => login.data);
     const jwt = getJwt();
 
     useEffect(() => {
@@ -24,10 +28,14 @@ function Sidebar(Childcomponent) {
           localStorage.removeItem("ecom");
         });
     }, []);
+    useEffect(() => {
+      if (userLoggedin === null) {
+        props.history.push("/login");
+      }
+    }, [userLoggedin]);
 
     const handleLogout = () => {
-      localStorage.removeItem("ecom");
-      props.history.push("/login");
+      dispatch(loggedOut());
     };
     return (
       <div className="container-fluid">

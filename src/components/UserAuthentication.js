@@ -14,13 +14,17 @@ function Authentication(props) {
 
     if (jwt) {
       dispatch(loggedIn(jwt));
-      if (userLoggedIn.status === 0) {
-        props.history.push("/admin/dashboard");
-      }
-    } else {
-      props.history.push("/");
     }
   }, []);
+
+  // console.log("user1", userLoggedIn);
+  // useEffect(() => {
+  //   if (userLoggedIn.status === 0) {
+  //     props.history.push("/admin/dashboard");
+  //   } else {
+  //     props.history.push("/");
+  //   }
+  // }, [userLoggedIn]);
   return <div>{props.children}</div>;
 }
 
