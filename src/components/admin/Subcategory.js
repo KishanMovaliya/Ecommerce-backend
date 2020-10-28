@@ -242,7 +242,7 @@ function Subcategory(props) {
               <tr key={subcategory._id}>
                 {categories.map((category) => {
                   if (category._id === subcategory.categoryId) {
-                    return <td>{category.category}</td>;
+                    return <td key={category._id}>{category.category}</td>;
                   }
                 })}
 

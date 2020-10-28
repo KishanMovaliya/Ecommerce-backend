@@ -10,13 +10,25 @@ import Header from "./Header";
 
 import "antd/dist/antd.css";
 import { Button, Modal, Input } from "antd";
+import { postCheckoutDetails } from "../redux/actions/chechoutproductActions";
+import { OmitProps } from "antd/lib/transfer/ListBody";
 
-function Addtocart() {
+function Addtocart(props) {
   const dispatch = useDispatch();
   const cartDetails = useSelector(
     ({ userproductcart }) => userproductcart.data
   );
+  const checkoutProducts = useSelector(
+    ({ checkoutproduct }) => checkoutproduct.data
+  );
 
+  const [checkoutDetails, setCheckoutDetails] = useState([
+    {
+      name: "",
+      address: "",
+      contact: "",
+    },
+  ]);
   const [isVisible, setIsVisible] = useState(false);
 
   const jwt = getJwt();
@@ -37,7 +49,20 @@ function Addtocart() {
   const handleInVisibility = () => {
     setIsVisible(false);
   };
-  console.log(isVisible);
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    setCheckoutDetails({ ...checkoutDetails, [e.target.name]: e.target.value });
+  };
+
+  const handleCheckoutSubmit = (e) => {
+    e.preventDefault();
+    console.log(cartDetails.data);
+    console.log(checkoutDetails);
+    dispatch(postCheckoutDetails(checkoutDetails, cartDetails.data, jwt));
+    props.history.push("/tracking");
+  };
+  console.log("c", checkoutProducts);
   return (
     <div className="px-4 px-lg-0">
       <div className="pb-5">
@@ -135,7 +160,7 @@ function Addtocart() {
       </div>
       <Modal
         visible={isVisible}
-        title="Title"
+        title="Fill Address Details"
         // onOk={handleVisibility}
         onCancel={handleInVisibility}
         footer={[
@@ -146,16 +171,31 @@ function Addtocart() {
             key="submit"
             type="primary"
             // loading={loading}
-            // onClick={this.handleOk}
+            onClick={handleCheckoutSubmit}
           >
             Submit
           </Button>,
         ]}
       >
         <form>
-          <Input placeholder="User Name" />
-          <Input placeholder="Address" />
-          <Input placeholder="Contact" />
+          <Input
+            placeholder="User Name"
+            name="name"
+            id="name"
+            onChange={handleCheckout}
+          />
+          <Input
+            placeholder="Address"
+            name="address"
+            id="address"
+            onChange={handleCheckout}
+          />
+          <Input
+            placeholder="Contact"
+            name="contact"
+            id="contact"
+            onChange={handleCheckout}
+          />
         </form>
       </Modal>
     </div>

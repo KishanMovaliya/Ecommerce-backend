@@ -19,7 +19,7 @@ function Header(Childcomponent) {
       }
     }, []);
     useEffect(() => {
-      if (userLoggedin.status === 0) {
+      if (userLoggedin && userLoggedin.status === 0) {
         props.history.push("/admin/dashboard");
       }
     }, [userLoggedin]);

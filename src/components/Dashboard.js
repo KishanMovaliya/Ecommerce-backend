@@ -7,6 +7,7 @@ import Header from "./Header";
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts } from "../redux/actions/productActions";
 import { loggedIn } from "../redux/actions/registerActions";
+import { getUserProductCart } from "../redux/actions/userproductcartActions";
 
 function Dashboard(props) {
   const jwt = getJwt();
