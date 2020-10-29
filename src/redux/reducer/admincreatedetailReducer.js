@@ -1,4 +1,8 @@
-import { ADMIN_CREATE_CATEGORY } from "../actions/types";
+import {
+  ADMIN_CREATE_CATEGORY,
+  ADMIN_CREATE_PRODUCT,
+  ADMIN_CREATE_SUB_CATEGORY,
+} from "../actions/types";
 
 const initialState = {
   data: null,
@@ -8,6 +12,19 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case ADMIN_CREATE_CATEGORY:
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+      };
+    case ADMIN_CREATE_SUB_CATEGORY:
+      return {
+        ...state,
+        data: action.payload,
+        loading: false,
+      };
+
+    case ADMIN_CREATE_PRODUCT:
       return {
         ...state,
         data: action.payload,

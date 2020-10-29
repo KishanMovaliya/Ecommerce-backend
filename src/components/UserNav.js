@@ -1,7 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function UserNav() {
+  const userLoggedin = useSelector(({ login }) => login.data);
+
+  console.log(userLoggedin);
+
   return (
     <>
       <div>
@@ -16,11 +21,17 @@ function UserNav() {
               Products
             </Link>
           </li>
-          <li className="padding20 lifont">
-            <Link to="/tracking" className="color-darkslategray">
-              Tracking
-            </Link>
-          </li>
+          {userLoggedin &&
+          userLoggedin !== null &&
+          userLoggedin.length !== 0 ? (
+            <li className="padding20 lifont">
+              <Link to="/tracking" className="color-darkslategray">
+                Tracking
+              </Link>
+            </li>
+          ) : (
+            ""
+          )}
         </ul>
       </div>
     </>

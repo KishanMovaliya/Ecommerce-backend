@@ -1,7 +1,15 @@
 import { Button, makeStyles, TextField } from "@material-ui/core";
 import Axios from "axios";
-import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createProduct } from "../../redux/actions/admincreatedetailActions";
+import { deleteProduct } from "../../redux/actions/admindeletedetailActoins";
+import {
+  getAdminAllCategory,
+  getAdminAllProduct,
+} from "../../redux/actions/admingetdetailsActions";
+import { getSubFromCategory } from "../../redux/actions/admingetsingledetailActions";
+import { updateProduct } from "../../redux/actions/adminupdatedetailActions";
 
 import Sidebar from "./Sidebar";
 
@@ -15,7 +23,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Product(props) {
   const classes = useStyles();
-  const [showProduct, setShowProduct] = useState([]);
+  // const [showProduct, setShowProduct] = useState([]);
+  const showProduct = useSelector(
+    ({ admingetdetail }) => admingetdetail.productdata
+  );
   const [allSubCategory, setAllSubCategory] = useState([]);
   const [image, setImage] = useState([]);
   const [productDetails, setProductDetails] = useState({
@@ -27,60 +38,24 @@ function Product(props) {
     descriptions: "",
     price: "",
   });
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  const categories = useSelector(({ admingetdetail }) => admingetdetail.data);
+  // const [subcategories, setSubCategories] = useState([]);
+  const subcategories = useSelector(
+    ({ admingetsingledetail }) => admingetsingledetail.data
+  );
   const [error, setError] = useState([]);
+  const dispatch = useDispatch();
 
-  const selectAllProduct = () => {
-    Axios.get("http://localhost:4444/products/selectAll")
-      .then((res) => {
-        setShowProduct(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
-  };
-
-  const selectAllSubCategory = () => {
-    Axios.get("http://localhost:4444/subcategories/selectall")
-      .then((res) => {
-        setAllSubCategory(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
-  };
   useEffect(() => {
-    selectAllProduct();
-    selectAllSubCategory();
-
-    Axios.get("http://localhost:4444/categories/selectall")
-      .then((res) => {
-        setCategories(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
+    dispatch(getAdminAllProduct());
+    dispatch(getAdminAllCategory());
   }, []);
   const handleCategoryChange = (e) => {
     e.preventDefault();
     setProductDetails({ ...productDetails, categoryId: e.target.value });
     const id = e.target.value;
-    Axios.get(`http://localhost:4444/subcategories/usecategoryid/${id}`)
-      .then((res) => {
-        setSubCategories(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
+    dispatch(getSubFromCategory(id));
   };
 
   const handleSubChange = (e) => {
@@ -104,30 +79,12 @@ function Product(props) {
 
   const handleDelete = (e, id) => {
     e.preventDefault();
-
-    Axios.delete(`http://localhost:4444/products/deleteproduct/${id}`)
-      .then((res) => {
-        alert("Deleted Successfully.");
-        selectAllProduct();
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
+    dispatch(deleteProduct(id));
   };
-  const handleUpdate = (e, id) => {
+  const handleUpdate = (e, product) => {
     e.preventDefault();
-    Axios.get(`http://localhost:4444/products/selectproduct/${id}`)
-      .then((res) => {
-        selectAllSubCategory();
-        setProductDetails(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
+    console.log(product);
+    setProductDetails(product);
   };
 
   const handleSubmit = (e) => {
@@ -140,20 +97,8 @@ function Product(props) {
       data.append("price", productDetails.price);
       data.append("images", image);
 
-      Axios.put(
-        `http://localhost:4444/products/updateproduct/${productDetails._id}`,
-        data
-      )
-        .then((res) => {
-          setError("updated Successfully.");
-          handleReset(e);
-          selectAllProduct();
-        })
-        .catch((err) => {
-          if (err.response.data.status === 400) {
-            setError(err.response.data.msg);
-          }
-        });
+      dispatch(updateProduct(productDetails._id, data));
+      handleReset(e);
     } else {
       const data = new FormData();
       data.append("title", productDetails.title);
@@ -161,20 +106,14 @@ function Product(props) {
       data.append("price", productDetails.price);
       data.append("images", productDetails.images);
 
-      Axios.post(
-        `http://localhost:4444/products/create/${productDetails.categoryId}/${productDetails.subcategoryId}`,
-        data
-      )
-        .then((res) => {
-          setError("Created Successfully.");
-          handleReset(e);
-          selectAllProduct();
-        })
-        .catch((err) => {
-          if (err.response.data.status === 400) {
-            setError(err.response.data.msg);
-          }
-        });
+      dispatch(
+        createProduct(
+          productDetails.categoryId,
+          productDetails.subcategoryId,
+          data
+        )
+      );
+      handleReset(e);
     }
   };
 
@@ -202,7 +141,7 @@ function Product(props) {
           onSubmit={handleSubmit}
           encType="multipart/form-data"
         >
-          {productDetails._id ? (
+          {productDetails && productDetails._id ? (
             <>
               <input type="hidden" name="_id" value={productDetails._id} />
               <div className="form-group">
@@ -212,15 +151,9 @@ function Product(props) {
                   name="category"
                   value={productDetails.categoryId}
                 >
-                  {categories.map((category) => {
-                    if (productDetails.categoryId === category._id) {
-                      return (
-                        <option key={category._id} value={category._id}>
-                          {category.category}
-                        </option>
-                      );
-                    }
-                  })}
+                  <option value={productDetails.categoryId}>
+                    {productDetails.categoryId.category}
+                  </option>
                 </select>
               </div>
 
@@ -231,15 +164,9 @@ function Product(props) {
                   name="category"
                   value={productDetails.subcategoryId}
                 >
-                  {allSubCategory.map((subcategory) => {
-                    if (productDetails.subcategoryId === subcategory._id) {
-                      return (
-                        <option key={subcategory._id} value={subcategory._id}>
-                          {subcategory.subcategory}
-                        </option>
-                      );
-                    }
-                  })}
+                  <option value={productDetails.subcategoryId}>
+                    {productDetails.subcategoryId.subcategory}
+                  </option>
                 </select>
               </div>
             </>
@@ -254,11 +181,12 @@ function Product(props) {
                   value={productDetails.categoryId}
                 >
                   <option value="">--Select Category--</option>
-                  {categories.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.category}
-                    </option>
-                  ))}
+                  {categories &&
+                    categories.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.category}
+                      </option>
+                    ))}
                 </select>
               </div>
 
@@ -271,7 +199,7 @@ function Product(props) {
                   value={productDetails.subcategoryId}
                 >
                   <option value="">--Select Sub Category--</option>
-                  {subcategories
+                  {subcategories && subcategories
                     ? subcategories.map((subcategory) => (
                         <option key={subcategory._id} value={subcategory._id}>
                           {subcategory.subcategory}
@@ -353,44 +281,31 @@ function Product(props) {
             </tr>
           </thead>
           <tbody>
-            {showProduct.map((product) => (
-              <tr key={product._id}>
-                <td>
-                  <img
-                    src={`http://localhost:4444/${product.images}`}
-                    alt={product.images}
-                    style={{ width: 50, height: 50 }}
-                  />
-                </td>
-                {categories.map((category) => {
-                  if (category._id === product.categoryId) {
-                    return (
-                      <td key={product.categoryId}>{category.category}</td>
-                    );
-                  }
-                })}
-                {allSubCategory.map((subcategory) => {
-                  if (subcategory._id === product.subcategoryId) {
-                    return (
-                      <td key={product.subcategoryId}>
-                        {subcategory.subcategory}
-                      </td>
-                    );
-                  }
-                })}
-                <td>{product.title}</td>
-                <td>{product.descriptions}</td>
-                <td>{product.price}</td>
-                <td>
-                  <button onClick={(e) => handleDelete(e, product._id)}>
-                    Delete
-                  </button>
-                  <button onClick={(e) => handleUpdate(e, product._id)}>
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {showProduct &&
+              showProduct.map((product) => (
+                <tr key={product._id}>
+                  <td>
+                    <img
+                      src={`http://localhost:4444/${product.images}`}
+                      alt={product.images}
+                      style={{ width: 50, height: 50 }}
+                    />
+                  </td>
+                  <td>{product.categoryId.category}</td>
+                  <td>{product.subcategoryId.subcategory}</td>
+                  <td>{product.title}</td>
+                  <td>{product.descriptions}</td>
+                  <td>{product.price}</td>
+                  <td>
+                    <button onClick={(e) => handleDelete(e, product._id)}>
+                      Delete
+                    </button>
+                    <button onClick={(e) => handleUpdate(e, product)}>
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

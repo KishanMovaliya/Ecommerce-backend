@@ -57,12 +57,9 @@ function Addtocart(props) {
 
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
-    console.log(cartDetails.data);
-    console.log(checkoutDetails);
     dispatch(postCheckoutDetails(checkoutDetails, cartDetails.data, jwt));
     props.history.push("/tracking");
   };
-  console.log("c", checkoutProducts);
   return (
     <div className="px-4 px-lg-0">
       <div className="pb-5">

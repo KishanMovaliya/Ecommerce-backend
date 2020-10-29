@@ -30,52 +30,39 @@ const validate = (values) => {
 
 function Category(props) {
   const classes = useStyles();
-  // const [categories, setCategories] = useState([]);
-  // const [updateId, setUpdateId] = useState();
   const [error, setError] = useState([]);
+  const [updateCategoryValue, setUpdateCategoryValue] = useState(null);
 
   const dispatch = useDispatch();
   const categories = useSelector(({ admingetdetail }) => admingetdetail.data);
-  const updateId = useSelector(
-    ({ admingetsingledetail }) => admingetsingledetail.data
-  );
 
   useEffect(() => {
     dispatch(getAdminAllCategory());
   }, []);
-  useEffect(() => {
-    if (updateId) {
-      formik.values.category = updateId.category;
-      formik.values._id = updateId._id;
-    }
-  }, [updateId]);
-  console.log(updateId);
+
   const handleDelete = (e, id) => {
     e.preventDefault();
     dispatch(deleteCategory(id));
   };
 
-  const handleUpdate = (e, id) => {
+  const handleUpdate = (e, category) => {
     e.preventDefault();
-    dispatch(getSingleCategory(id));
+    setUpdateCategoryValue(category);
   };
 
   const formik = useFormik({
     initialValues: {
-      _id: "",
-      category: "",
-      // _id: updateId && updateId._id,
-      // category: updateId && updateId.category,
+      _id: updateCategoryValue ? updateCategoryValue._id : "",
+      category: updateCategoryValue ? updateCategoryValue.category : "",
     },
+    enableReinitialize: true,
     validate,
     onSubmit: (values) => {
       if (values._id) {
-        console.log("update", values);
         dispatch(updateCategory(values));
         values._id = "";
         values.category = "";
       } else {
-        console.log("insert", values);
         dispatch(createCategory(values));
         values._id = "";
         values.category = "";
@@ -148,7 +135,7 @@ function Category(props) {
                     <button onClick={(e) => handleDelete(e, category._id)}>
                       Delete
                     </button>
-                    <button onClick={(e) => handleUpdate(e, category._id)}>
+                    <button onClick={(e) => handleUpdate(e, category)}>
                       Update
                     </button>
                   </td>

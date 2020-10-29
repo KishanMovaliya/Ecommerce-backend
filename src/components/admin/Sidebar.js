@@ -4,35 +4,28 @@ import AdminNav from "./AdminNav";
 import Axios from "axios";
 import { getJwt } from "../../helper/jwt";
 import { useDispatch, useSelector } from "react-redux";
-import { loggedOut } from "../../redux/actions/loginActions";
+import { loggedIn, loggedOut } from "../../redux/actions/loginActions";
 
 function Sidebar(Childcomponent) {
   return function ResponsiveHeader(props) {
-    const [user, setUser] = useState();
+    const user = useSelector(({ login }) => login.data);
+    const [token, setToken] = useState(getJwt());
     const dispatch = useDispatch();
-    const userLoggedin = useSelector(({ login }) => login.data);
+
     const jwt = getJwt();
 
     useEffect(() => {
       if (!jwt) {
         props.history.push("/");
+      } else {
+        dispatch(loggedIn(jwt));
       }
-
-      Axios.get("http://localhost:4444/posts/loggeddata", {
-        headers: { authorization: jwt },
-      })
-        .then((res) => {
-          setUser([res.data]);
-        })
-        .catch((error) => {
-          localStorage.removeItem("ecom");
-        });
     }, []);
     useEffect(() => {
-      if (userLoggedin === null) {
+      if (user === null) {
         props.history.push("/login");
       }
-    }, [userLoggedin]);
+    }, [user]);
 
     const handleLogout = () => {
       dispatch(loggedOut());
@@ -51,33 +44,16 @@ function Sidebar(Childcomponent) {
           <div className="col-md-10">
             <div className="row">
               <div className="col-md-12 col-sm-12">
-                {user ? (
+                {token ? (
                   <div className="offset-md-5 col-md-3 col-sm-12">
-                    {user[0].email.split("@")[0]}
+                    {user && user.email}
 
                     <button className="btn btn-info " onClick={handleLogout}>
                       logout
                     </button>
                   </div>
                 ) : (
-                  <div className="col-md-3 col-sm-12">
-                    <button
-                      className="btn btn-primary   "
-                      onClick={() => {
-                        props.history.push("/login");
-                      }}
-                    >
-                      Login
-                    </button>
-                    <button
-                      className="btn btn-info "
-                      onClick={() => {
-                        props.history.push("/register");
-                      }}
-                    >
-                      Register
-                    </button>
-                  </div>
+                  " "
                 )}
               </div>
               <Childcomponent {...props} />

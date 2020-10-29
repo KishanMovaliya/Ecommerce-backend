@@ -38,7 +38,6 @@ function ProductDetails(props) {
   }, [singleProduct]);
   const handleAddToCart = (e, singleProduct) => {
     e.preventDefault();
-    console.log(jwt, singleProduct);
     dispatch(addtocartProduct(singleProduct, jwt));
     dispatch(getUserProductCart(jwt));
     if (addtocart !== null) {

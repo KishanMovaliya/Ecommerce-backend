@@ -13,6 +13,8 @@ import admingetsingledetailReducer from "./admingetsingledetailReducer";
 import admincreatedetailReducer from "./admincreatedetailReducer";
 import adminupdatedetailReducer from "./adminupdatedetailReducer";
 import admindeletedetailReducer from "./admindeletedetailReducer";
+import adminuserorderReducer from "./adminuserorderReducer";
+import adminorderstatusReducer from "./adminorderstatusReducer";
 
 export default combineReducers({
   singleproduct: singleproductReducer,
@@ -29,4 +31,6 @@ export default combineReducers({
   admincreatedetail: admincreatedetailReducer,
   adminupdatedetail: adminupdatedetailReducer,
   admindeletedetail: admindeletedetailReducer,
+  adminuserorder: adminuserorderReducer,
+  adminorderstatus: adminorderstatusReducer,
 });

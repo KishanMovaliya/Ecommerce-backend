@@ -1,7 +1,4 @@
-import {
-  ADMIN_SINGLE_CATEGORY,
-  ADMIN_SUB_FROM_CATEGORY,
-} from "../actions/types";
+import { ADMIN_ORDER_STATUS } from "../actions/types";
 
 const initialState = {
   data: null,
@@ -10,19 +7,13 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case ADMIN_SINGLE_CATEGORY:
+    case ADMIN_ORDER_STATUS:
       return {
         ...state,
         data: action.payload,
         loading: false,
       };
 
-    case ADMIN_SUB_FROM_CATEGORY:
-      return {
-        ...state,
-        data: action.payload,
-        loading: false,
-      };
     default:
       return state;
   }

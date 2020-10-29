@@ -17,6 +17,7 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import ProductDetails from "./ProductDetails";
 import Addtocart from "./Addtocart";
+import UserOrder from "./admin/UserOrder";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/admin/category" component={Category} />
             <Route path="/admin/subcategory" component={Subcategory} />
             <Route path="/admin/product" component={Product} />
+            <Route path="/admin/userorder" component={UserOrder} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/allproduct" component={AllProduct} />
             <Route

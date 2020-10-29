@@ -1,7 +1,14 @@
 import { Button, makeStyles, TextField } from "@material-ui/core";
-import Axios from "axios";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createSubCategory } from "../../redux/actions/admincreatedetailActions";
+import { deleteSubCategory } from "../../redux/actions/admindeletedetailActoins";
+import {
+  getAdminAllCategory,
+  getAdminAllSubCategory,
+} from "../../redux/actions/admingetdetailsActions";
+import { updateSubCategory } from "../../redux/actions/adminupdatedetailActions";
 
 import Sidebar from "./Sidebar";
 
@@ -32,103 +39,49 @@ const validate = (values) => {
   return errors;
 };
 
-function Subcategory(props) {
+function Subcategory() {
   const classes = useStyles();
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubCategories] = useState([]);
+
+  const [updateSubcategoryValue, setUpdateSubcategoryValue] = useState(null);
   const [error, setError] = useState([]);
 
-  const selectAllSubCategories = () => {
-    return Axios.get("http://localhost:4444/subcategories/selectall")
-      .then((res) => {
-        setSubCategories(res.data);
-      })
-      .catch((err) => {
-        setError(err);
-      });
-  };
-
+  const subcategories = useSelector(
+    ({ admingetdetail }) => admingetdetail.subdata
+  );
+  const categories = useSelector(({ admingetdetail }) => admingetdetail.data);
+  const dispatch = useDispatch();
   useEffect(() => {
-    selectAllSubCategories();
-
-    Axios.get("http://localhost:4444/categories/selectall")
-      .then((res) => {
-        setCategories(res.data);
-      })
-      .catch((err) => {
-        if (err.response.data.status === 400) {
-          setError(err.response.data.msg);
-        }
-      });
+    dispatch(getAdminAllSubCategory());
+    dispatch(getAdminAllCategory());
   }, []);
 
   const handleDelete = (e, id) => {
     e.preventDefault();
-    Axios.delete(`http://localhost:4444/subcategories/delete/${id}`)
-      .then((res) => {
-        alert("Record Deleted Successfully.");
-        selectAllSubCategories();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(deleteSubCategory(id));
   };
-  const handleUpdate = (e, id) => {
+  const handleUpdate = (e, subcategory) => {
     e.preventDefault();
-    Axios.get(`http://localhost:4444/subcategories/select/${id}`)
-      .then((res) => {
-        formik.values.category = res.data.categoryId;
-        formik.values.subcategory = res.data.subcategory;
-        formik.values._id = res.data._id;
-
-        selectAllSubCategories();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setUpdateSubcategoryValue(subcategory);
   };
 
   const formik = useFormik({
     initialValues: {
-      _id: "",
-      subcategory: "",
-      category: "",
+      _id: updateSubcategoryValue ? updateSubcategoryValue._id : "",
+      subcategory: updateSubcategoryValue
+        ? updateSubcategoryValue.subcategory
+        : "",
+      category: updateSubcategoryValue ? updateSubcategoryValue.categoryId : "",
     },
+    enableReinitialize: true,
     validate,
     onSubmit: (values) => {
       if (values._id) {
-        Axios.put(
-          `http://localhost:4444/subcategories/update/${values._id}`,
-          values
-        )
-          .then((res) => {
-            setError("Updated Successfully");
-            values.category = "";
-            values.subcategory = "";
-            values._id = "";
-            selectAllSubCategories();
-          })
-          .catch((err) => {
-            if (err.response.status === 400) {
-              setError(err.response.data.msg);
-            }
-          });
+        dispatch(updateSubCategory(values));
       } else {
-        Axios.post(
-          `http://localhost:4444/subcategories/create/${values.category}`,
-          values
-        )
-          .then((res) => {
-            setError("Created Successfully");
-            values.subcategory = "";
-            values.category = "";
-            selectAllSubCategories();
-          })
-          .catch((err) => {
-            if (err.response.status === 400) {
-              setError(err.response.data.msg);
-            }
-          });
+        dispatch(createSubCategory(values.category, values));
+        values.category = "";
+        values.subcategory = "";
+        values._id = "";
       }
     },
   });
@@ -155,18 +108,9 @@ function Subcategory(props) {
                   onChange={formik.handleChange}
                   value={formik.values.category}
                 >
-                  {categories.map((category) => {
-                    if (category._id === formik.values.category) {
-                      return (
-                        <option
-                          key={category._id}
-                          value={formik.values.category}
-                        >
-                          {category.category}
-                        </option>
-                      );
-                    }
-                  })}
+                  <option value={formik.values.category}>
+                    {updateSubcategoryValue.categoryId.category}
+                  </option>
                 </select>
               </div>
             </>
@@ -180,11 +124,12 @@ function Subcategory(props) {
                 value={formik.values.category}
               >
                 <option value="">--Select Category--</option>
-                {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.category}
-                  </option>
-                ))}
+                {categories &&
+                  categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.category}
+                    </option>
+                  ))}
               </select>
             </div>
           )}
@@ -238,25 +183,22 @@ function Subcategory(props) {
             </tr>
           </thead>
           <tbody>
-            {subcategories.map((subcategory) => (
-              <tr key={subcategory._id}>
-                {categories.map((category) => {
-                  if (category._id === subcategory.categoryId) {
-                    return <td key={category._id}>{category.category}</td>;
-                  }
-                })}
+            {subcategories &&
+              subcategories.map((subcategory) => (
+                <tr key={subcategory._id}>
+                  <td>{subcategory.categoryId.category}</td>
 
-                <td>{subcategory.subcategory}</td>
-                <td>
-                  <button onClick={(e) => handleDelete(e, subcategory._id)}>
-                    Delete
-                  </button>
-                  <button onClick={(e) => handleUpdate(e, subcategory._id)}>
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  <td>{subcategory.subcategory}</td>
+                  <td>
+                    <button onClick={(e) => handleDelete(e, subcategory._id)}>
+                      Delete
+                    </button>
+                    <button onClick={(e) => handleUpdate(e, subcategory)}>
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

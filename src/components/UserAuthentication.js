@@ -17,7 +17,6 @@ function Authentication(props) {
     }
   }, []);
 
-  // console.log("user1", userLoggedIn);
   // useEffect(() => {
   //   if (userLoggedIn.status === 0) {
   //     props.history.push("/admin/dashboard");

@@ -27,10 +27,10 @@ function Tracking() {
         <div className="row d-flex justify-content-center">
           <div className="col-12">
             <ul id="progressbar" className="text-center">
-              <li className="active step0"></li>
-              <li className="step0"></li>
-              <li className="step0"></li>
-              <li className="step0"></li>
+              <li className={`active step0`}></li>
+              <li className={`step0`}></li>
+              <li className={`step0`}></li>
+              <li className={`step0`}></li>
             </ul>
           </div>
         </div>

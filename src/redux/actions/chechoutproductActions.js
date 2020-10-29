@@ -11,7 +11,6 @@ export const postCheckoutDetails = (checkoutDetails, cartDetails, jwt) => {
       },
     }).then((res) => {
       const response = res.data;
-      // console.log("response", response);
       dispatch({
         type: CHECKOUT_PRODUCT,
         payload: response,
