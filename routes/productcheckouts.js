@@ -9,14 +9,12 @@ router.post("/finalcheckout", verify, async (req, res) => {
   const userId = req.user._id;
   const { cartDetails } = req.body;
   const checkoutDetails = req.body.checkoutDetails;
-  // console.log("checkoutDetails:", checkoutDetails);
 
   try {
     const dataExist = await Productcheckout.find({ userId: userId, status: 0 });
     if (dataExist.length > 0) {
       return res.json({ status: 200, data: "your ordered already booked." });
     } else {
-      console.log("dataExist");
       const checkoutData = new Productcheckout({
         addtocartId: cartDetails,
         userId: userId,
@@ -34,7 +32,6 @@ router.post("/finalcheckout", verify, async (req, res) => {
       if (upStatus) {
         upStatus.map(async (upstatus) => {
           const st = await Addtocart.findById(upstatus._id);
-          console.log(st);
           st.status = 1;
           await st.save();
         });

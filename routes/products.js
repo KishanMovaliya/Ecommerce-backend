@@ -61,7 +61,10 @@ router.post(
 //----select product----
 router.get("/selectAll", async (req, res) => {
   try {
-    const product = await Products.find().sort({ _id: -1 });
+    const product = await Products.find()
+      .populate("categoryId")
+      .populate("subcategoryId")
+      .sort({ _id: -1 });
     return res.json(product);
   } catch (error) {
     return res.send({ status: 400, msg: error.message });
