@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import Header from "./Header";
-
+import url from "../config/config";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleProduct } from "../redux/actions/singleproductActions";
 import { getCategory } from "../redux/actions/categoryActions";
@@ -54,7 +54,7 @@ function ProductDetails(props) {
         <div className="row productbody">
           <div className="col-md-4 col-lg-4 col-12 mp0">
             <img
-              src={`http://localhost:4444/${singleProduct.images}`}
+              src={`${url}${singleProduct.images}`}
               height="500px"
               width="100%"
               className="borderradius5"

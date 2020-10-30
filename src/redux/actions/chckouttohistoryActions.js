@@ -1,10 +1,11 @@
 import Axios from "axios";
+import url from "../../config/config";
 import { CHECKOUT_TO_HISTORY } from "./types";
 
 export const movedToHistory = (jwt) => {
   return (dispatch) => {
     Axios.post(
-      `http://localhost:4444/orderhistories/movetohistory`,
+      `${url}orderhistories/movetohistory`,
       {},
       {
         headers: {

@@ -1,4 +1,5 @@
 import Axios from "axios";
+import url from "../../config/config";
 import {
   ADMIN_ALL_CATEGORY,
   ADMIN_ALL_PRODUCT,
@@ -7,7 +8,7 @@ import {
 
 export const getAdminAllCategory = () => {
   return (dispatch) => {
-    Axios.get(`http://localhost:4444/categories/selectall`).then((res) => {
+    Axios.get(`${url}categories/selectall`).then((res) => {
       const response = res.data;
       dispatch({
         type: ADMIN_ALL_CATEGORY,
@@ -19,7 +20,7 @@ export const getAdminAllCategory = () => {
 
 export const getAdminAllSubCategory = () => {
   return (dispatch) => {
-    Axios.get("http://localhost:4444/subcategories/selectall").then((res) => {
+    Axios.get(`${url}subcategories/selectall`).then((res) => {
       const response = res.data;
       dispatch({
         type: ADMIN_ALL_SUB_CATEGORY,
@@ -31,7 +32,7 @@ export const getAdminAllSubCategory = () => {
 
 export const getAdminAllProduct = () => {
   return (dispatch) => {
-    Axios.get("http://localhost:4444/products/selectAll").then((res) => {
+    Axios.get(`${url}products/selectAll`).then((res) => {
       const response = res.data;
       dispatch({
         type: ADMIN_ALL_PRODUCT,

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import url from "../config/config";
 import { getJwt } from "../helper/jwt";
 import { deleteProductFromUserCart } from "../redux/actions/addtocartActions";
 import { getUserProductCart } from "../redux/actions/userproductcartActions";
@@ -82,7 +83,7 @@ function Addtocart(props) {
                             <th scope="row" className="border-0">
                               <div className="p-2">
                                 <img
-                                  src={`http://localhost:4444/${cartDetail.productId.images}`}
+                                  src={`${url}${cartDetail.productId.images}`}
                                   alt=""
                                   width="70"
                                   height="70"

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Header from "./Header";
-
+import url from "../config/config";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -111,7 +111,7 @@ function AllProduct(props) {
                 <Card className={classes.card}>
                   <CardMedia
                     className={`${classes.cardMedia} imgshadow`}
-                    image={`http://localhost:4444/${products.images}`}
+                    image={`${url}${products.images}`}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>

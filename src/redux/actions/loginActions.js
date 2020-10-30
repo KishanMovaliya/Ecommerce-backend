@@ -1,9 +1,10 @@
 import Axios from "axios";
+import url from "../../config/config";
 import { LOGIN_SUCCESS, LOGGED_IN, LOGGED_OUT, LOGIN_ERROR } from "./types";
 
 export const loginSuccess = (values) => {
   return (dispatch) => {
-    Axios.post("http://localhost:4444/login/success", values)
+    Axios.post(`${url}login/success`, values)
       .then((res) => {
         const response = res.data;
         if (res.data.status === 400) {
@@ -29,7 +30,7 @@ export const loginSuccess = (values) => {
 
 export const loggedIn = (jwt) => {
   return (dispatch) => {
-    Axios.get("http://localhost:4444/posts/loggeddata", {
+    Axios.get(`${url}posts/loggeddata`, {
       headers: { authorization: jwt },
     })
       .then((res) => {

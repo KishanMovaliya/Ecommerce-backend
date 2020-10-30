@@ -1,9 +1,10 @@
 import Axios from "axios";
+import url from "../../config/config";
 import { ADMIN_USER_ORDER } from "./types";
 
 export const getUserOrder = (jwt) => {
   return (dispatch) => {
-    Axios.get(`http://localhost:4444/confirmedorders/userorder`, {
+    Axios.get(`${url}confirmedorders/userorder`, {
       headers: {
         authorization: jwt,
       },

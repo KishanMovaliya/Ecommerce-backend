@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import Header from "./Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserOrder } from "../../redux/actions/adminuserorderActions";
 import { getJwt } from "../../helper/jwt";
+import url from "../../config/config";
 import { updateOrderStatus } from "../../redux/actions/adminorderstatusActions";
+import Header from "./Sidebar";
 
 function UserOrder() {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ function UserOrder() {
                       <div key={orderproduct._id}>
                         <span>
                           <img
-                            src={`http://localhost:4444/${orderproduct.productId.images}`}
+                            src={`${url}${orderproduct.productId.images}`}
                             alt={orderproduct.productId.images}
                             style={{ height: 50, width: 50, margin: 10 }}
                           />

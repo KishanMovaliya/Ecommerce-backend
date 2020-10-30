@@ -1,5 +1,5 @@
 import { Button, makeStyles, TextField } from "@material-ui/core";
-import Axios from "axios";
+import url from "../../config/config";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createProduct } from "../../redux/actions/admincreatedetailActions";
@@ -285,7 +285,7 @@ function Product(props) {
                 <tr key={product._id}>
                   <td>
                     <img
-                      src={`http://localhost:4444/${product.images}`}
+                      src={`${url}${product.images}`}
                       alt={product.images}
                       style={{ width: 50, height: 50 }}
                     />
