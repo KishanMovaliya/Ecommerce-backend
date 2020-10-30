@@ -7,11 +7,7 @@ const app = express();
 
 dotenv.config();
 
-// parse various different custom JSON types as JSON
-app.use(bodyParser.json({ type: "application/*+json" }));
-
-// parse some custom thing into a Buffer
-app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
+app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
