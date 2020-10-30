@@ -1,5 +1,6 @@
 const config = {
-  develop: "https://backendecommerces.herokuapp.com/",
+  develop:
+    "https://cors-anywhere.herokuapp.com/https://backendecommerces.herokuapp.com/",
   local: "http://localhost:4444/",
 };
 
