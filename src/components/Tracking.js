@@ -145,20 +145,6 @@ function Tracking() {
                 </div>
               </div>
             </div>
-            <div className="row d-flex justify-content-center">
-              <div className="col-8">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">Images</th>
-                      <th scope="col">Title</th>
-                      <th scope="col">Price</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
           </div>
         ))}
     </div>
