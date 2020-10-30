@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // schema for checkout product
-const productcheckoutsSchema = new mongoose.Schema({
+const orderhistoriesSchema = new mongoose.Schema({
   addtocartId: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -26,11 +26,6 @@ const productcheckoutsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  status: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
   delivered: {
     type: Boolean,
     required: true,
@@ -38,4 +33,4 @@ const productcheckoutsSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Productcheckout", productcheckoutsSchema);
+module.exports = mongoose.model("Orderhistory", orderhistoriesSchema);

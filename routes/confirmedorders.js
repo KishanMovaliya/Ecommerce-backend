@@ -36,7 +36,6 @@ router.get("/userorder", verify, async (req, res) => {
 //------changed track status------
 router.post("/settrack", verify, async (req, res) => {
   const addtocartDetails = await Productcheckout.findById(req.body._id);
-  console.log(addtocartDetails);
 
   try {
     if (addtocartDetails) {
@@ -58,11 +57,13 @@ router.post("/settrack", verify, async (req, res) => {
         });
       } else if (addtocartDetails.status === 2) {
         addtocartDetails.status = 3;
+        addtocartDetails.delivered = true;
         const updateStatus = await addtocartDetails.save();
 
         return res.json({
           status: 200,
           msg: "status changed 2 to 3.",
+          delivered: true,
         });
       }
       return res.json(addtocartDetails);
@@ -85,7 +86,14 @@ router.get("/usertrack", verify, async (req, res) => {
   const userId = req.user._id;
   try {
     const trackData = await Productcheckout.find({ userId: userId })
-      .populate("addtocartId")
+      .populate({
+        path: "addtocartId",
+        populate: [
+          {
+            path: "productId",
+          },
+        ],
+      })
       .populate("userId");
     return res.json(trackData);
   } catch (error) {
