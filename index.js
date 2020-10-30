@@ -1,26 +1,33 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyparser = require("body-parser");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const app = express();
 
 dotenv.config();
+
+// parse various different custom JSON types as JSON
+app.use(bodyParser.json({ type: "application/*+json" }));
+
+// parse some custom thing into a Buffer
+app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
 app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "PUT, POST, GET, DELETE, PATCH, OPTIONS"
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+//   );
+//   next();
+// });
 
 //for set image publically
 app.use("/uploads", express.static("uploads"));
