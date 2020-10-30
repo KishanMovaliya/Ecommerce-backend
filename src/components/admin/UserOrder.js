@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Header from "./Sidebar";
-import ecom from "../../assets/slider-images/ecom-slide-1.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserOrder } from "../../redux/actions/adminuserorderActions";
 import { getJwt } from "../../helper/jwt";
@@ -26,7 +25,6 @@ function UserOrder() {
     e.preventDefault();
     alert(alertmessage);
   };
-
   return (
     <div className="col-md-12 col-sm-12" style={{ marginTop: 50 }}>
       <table className="table table-hover">
@@ -44,17 +42,18 @@ function UserOrder() {
         <tbody>
           {userOrders &&
             userOrders.map((userOrder) => (
-              <tr key={userOrder}>
-                <td scope="row">{userOrder.name}</td>
+              <tr key={userOrder._id}>
+                <td>{userOrder.name}</td>
                 <td>{userOrder.contact}</td>
                 <td>{userOrder.address}</td>
                 <td>
                   {userOrder.addtocartId &&
                     userOrder.addtocartId.map((orderproduct) => (
-                      <div key={orderproduct}>
+                      <div key={orderproduct._id}>
                         <span>
                           <img
                             src={`http://localhost:4444/${orderproduct.productId.images}`}
+                            alt={orderproduct.productId.images}
                             style={{ height: 50, width: 50, margin: 10 }}
                           />
                         </span>

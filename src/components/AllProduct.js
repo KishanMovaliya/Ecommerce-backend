@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
 
-import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
-import CameraIcon from "@material-ui/icons/PhotoCamera";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -18,9 +15,7 @@ import Link from "@material-ui/core/Link";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getProducts } from "../redux/actions/productActions";
-import { loggedIn } from "../redux/actions/registerActions";
 import { getJwt } from "../helper/jwt";
-import { PinDropSharp } from "@material-ui/icons";
 
 function Copyright() {
   return (
@@ -74,9 +69,6 @@ function AllProduct(props) {
   const jwt = getJwt();
   useEffect(() => {
     dispatch(getProducts());
-    // if (jwt) {
-    //   dispatch(loggedIn(jwt));
-    // }
   }, []);
 
   const handleProductView = (e, id) => {
@@ -88,7 +80,6 @@ function AllProduct(props) {
       <CssBaseline />
 
       <main>
-        {/* Hero unit */}
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography

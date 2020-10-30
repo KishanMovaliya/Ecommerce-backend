@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 function UserNav() {
   const userLoggedin = useSelector(({ login }) => login.data);
 
-  console.log(userLoggedin);
-
   return (
     <>
       <div>

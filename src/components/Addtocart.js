@@ -1,25 +1,18 @@
-import { DragHandle } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getJwt } from "../helper/jwt";
 import { deleteProductFromUserCart } from "../redux/actions/addtocartActions";
-import { getAllCategory } from "../redux/actions/categoryActions";
-import { getAllSubCategory } from "../redux/actions/subcategoryActions";
 import { getUserProductCart } from "../redux/actions/userproductcartActions";
 import Header from "./Header";
 
 import "antd/dist/antd.css";
 import { Button, Modal, Input } from "antd";
 import { postCheckoutDetails } from "../redux/actions/chechoutproductActions";
-import { OmitProps } from "antd/lib/transfer/ListBody";
 
 function Addtocart(props) {
   const dispatch = useDispatch();
   const cartDetails = useSelector(
     ({ userproductcart }) => userproductcart.data
-  );
-  const checkoutProducts = useSelector(
-    ({ checkoutproduct }) => checkoutproduct.data
   );
 
   const [checkoutDetails, setCheckoutDetails] = useState([

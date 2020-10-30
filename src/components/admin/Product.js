@@ -83,7 +83,6 @@ function Product(props) {
   };
   const handleUpdate = (e, product) => {
     e.preventDefault();
-    console.log(product);
     setProductDetails(product);
   };
 
@@ -268,16 +267,16 @@ function Product(props) {
         </form>
       </div>
       <div className="col-md-12 col-sm-12" style={{ marginTop: 50 }}>
-        <table border="1" width="100%">
+        <table className="table table-hover">
           <thead>
             <tr>
-              <th>Images</th>
-              <th>Category</th>
-              <th>Subcategory</th>
-              <th>Title</th>
-              <th>Descriptions</th>
-              <th>Price</th>
-              <th>action</th>
+              <th scope="col">Images</th>
+              <th scope="col">Category</th>
+              <th scope="col">Subcategory</th>
+              <th scope="col">Title</th>
+              <th scope="col">Descriptions</th>
+              <th scope="col">Price</th>
+              <th scope="col">action</th>
             </tr>
           </thead>
           <tbody>
@@ -293,14 +292,20 @@ function Product(props) {
                   </td>
                   <td>{product.categoryId.category}</td>
                   <td>{product.subcategoryId.subcategory}</td>
-                  <td>{product.title}</td>
-                  <td>{product.descriptions}</td>
-                  <td>{product.price}</td>
+                  <td width="250px">{product.title}</td>
+                  <td width="600px">{product.descriptions}</td>
+                  <td>&#x20B9; {product.price}</td>
                   <td>
-                    <button onClick={(e) => handleDelete(e, product._id)}>
+                    <button
+                      className="deletebtn"
+                      onClick={(e) => handleDelete(e, product._id)}
+                    >
                       Delete
                     </button>
-                    <button onClick={(e) => handleUpdate(e, product)}>
+                    <button
+                      className="updatebtn"
+                      onClick={(e) => handleUpdate(e, product)}
+                    >
                       Update
                     </button>
                   </td>

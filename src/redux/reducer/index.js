@@ -15,6 +15,8 @@ import adminupdatedetailReducer from "./adminupdatedetailReducer";
 import admindeletedetailReducer from "./admindeletedetailReducer";
 import adminuserorderReducer from "./adminuserorderReducer";
 import adminorderstatusReducer from "./adminorderstatusReducer";
+import userordertrackReducer from "./userordertrackReducer";
+import chckouttohistoryReducer from "./checkouttohistoryReducer";
 
 export default combineReducers({
   singleproduct: singleproductReducer,
@@ -33,4 +35,6 @@ export default combineReducers({
   admindeletedetail: admindeletedetailReducer,
   adminuserorder: adminuserorderReducer,
   adminorderstatus: adminorderstatusReducer,
+  userordertrack: userordertrackReducer,
+  chckouttohistory: chckouttohistoryReducer,
 });
