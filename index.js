@@ -7,7 +7,7 @@ const app = express();
 
 dotenv.config();
 
-app.use(bodyParser.json());
+app.use(bodyparser.json());
 app.use(cors());
 app.use(express.json());
 
